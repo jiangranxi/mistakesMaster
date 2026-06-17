@@ -1,7 +1,7 @@
 <template>
   <div class="class-page">
     <div class="content-padded">
-      <h3 class="page-title">我的班级</h3>
+      <h3 class="page-title">我加入的班级</h3>
       <div class="spacer-16"></div>
       <div class="card-grid">
         <div class="class-card" v-for="cls in classList" :key="cls.id">
@@ -21,13 +21,13 @@
         <h3 class="dialog-title">加入班级</h3>
         <div class="dialog-body">
           <div class="form-row">
-            <label>班级邀请码</label>
-            <input class="form-input" v-model="joinCode" placeholder="请输入班级邀请码" />
+            <label>班级号</label>
+            <input class="form-input" v-model="joinCode" placeholder="请输入班级号" />
           </div>
           <div class="spacer-16"></div>
           <div class="form-row">
             <label>验证消息</label>
-            <input class="form-input" v-model="joinMsg" placeholder="请输入验证消息" />
+            <textarea class="form-textarea" v-model="joinMsg" placeholder="请输入验证消息" rows="4"></textarea>
           </div>
         </div>
         <div class="dialog-footer">
@@ -80,6 +80,7 @@ loadData()
 .form-row { display: flex; flex-direction: column; gap: 8px; }
 .form-row label { font-size: 14px; color: #666; }
 .form-input { width: 100%; height: 40px; padding: 8px 12px; border: 0.8px solid #D1D5DB; border-radius: 4px; font-size: 14px; outline: none; }
+.form-textarea { width: 100%; min-height: 80px; padding: 8px 12px; border: 0.8px solid #D1D5DB; border-radius: 4px; font-size: 14px; outline: none; resize: vertical; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; }
 .dialog-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 0 24px 24px; }
 .btn-cancel { padding: 8px 24px; border: 0.8px solid #D1D5DB; border-radius: 4px; background: #fff; cursor: pointer; }
 .btn-confirm { padding: 8px 24px; border: none; border-radius: 4px; background: #2563EB; color: #fff; cursor: pointer; }

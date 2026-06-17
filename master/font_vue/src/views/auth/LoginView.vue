@@ -4,7 +4,7 @@
     <div class="brand-area">
       <div class="logo-wrapper">
         <img class="logo-img" src="@/assets/logo.svg" alt="logo" />
-        <span class="spacer-16"></span>
+        <span class="spacer-24"></span>
         <div class="brand-name">
           <span class="brand-title">错题通</span>
           <span class="brand-subtitle">科学高效学习方法平台</span>
@@ -19,7 +19,6 @@
       <!-- 手机号输入 -->
       <div class="input-row">
         <i class="ri-smartphone-line input-icon"></i>
-        <span class="spacer-16"></span>
         <input
           v-model="phone"
           class="input-field"
@@ -34,7 +33,6 @@
       <!-- 密码输入 -->
       <div class="input-row">
         <i class="ri-lock-password-line input-icon"></i>
-        <span class="spacer-16"></span>
         <input
           v-model="password"
           class="input-field"
@@ -60,7 +58,7 @@
 
       <!-- 底部链接 -->
       <div class="bottom-links">
-        <a href="/auth/register-teacher" class="link">用户注册</a>
+        <router-link to="/auth/register-teacher" class="link">用户注册</router-link>
         <span class="flex-spacer"></span>
         <a href="/auth/forgot-password" class="link">忘记密码？</a>
       </div>
@@ -125,28 +123,29 @@ function mockGo(role) {
 }
 
 .logo-img {
-  width: 82px;
-  height: 95px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
 }
 
 .brand-name {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
 .brand-title {
-  font-size: 64px;
+  font-size: 48px;
   font-family: 'SourceHanSans-ExtraBold', 'Noto Sans SC', sans-serif;
-  color: #22C55E;
+  color: #006644;
   line-height: 1.2;
 }
 
 .brand-subtitle {
-  font-size: 24px;
-  color: #6B7280;
-  line-height: 1.2;
+  font-size: 28px;
+  font-family: 'SourceHanSans-Bold', 'Noto Sans SC', sans-serif;
+  color: #9CA3AF;
+  line-height: 1.3;
 }
 
 .spacer-16 { width: 16px; height: 16px; flex-shrink: 0; }
@@ -165,8 +164,7 @@ function mockGo(role) {
 .input-row {
   display: flex;
   align-items: center;
-  padding-bottom: 12px;
-  border-bottom: 0.8px solid #D1D5DB;
+  gap: 16px;
 }
 
 .input-icon {
@@ -178,11 +176,13 @@ function mockGo(role) {
 .input-field {
   flex: 1;
   border: none;
+  border-bottom: 0.8px solid #D1D5DB;
   outline: none;
   font-size: 18px;
   color: #374151;
   font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif;
   background: transparent;
+  padding: 0 0 10px;
 }
 
 .input-field::placeholder {

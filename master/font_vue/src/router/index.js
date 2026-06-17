@@ -11,8 +11,8 @@ const routes = [
     path: '/auth',
     children: [
       { path: 'login', name: 'Login', component: () => import('@/views/auth/LoginView.vue') },
-      { path: 'register-teacher', name: 'RegisterTeacher', component: () => import('@/views/auth/RegisterTeacher.vue') },
-      { path: 'register-student', name: 'RegisterStudent', component: () => import('@/views/auth/RegisterStudent.vue') },
+      { path: 'register-teacher', name: 'RegisterTeacher', component: () => import('@/views/auth/RegisterView.vue') },
+      { path: 'register-student', name: 'RegisterStudent', component: () => import('@/views/auth/RegisterView.vue') },
       { path: 'forgot-password', name: 'ForgotPassword', component: () => import('@/views/auth/ForgotPassword.vue') },
       { path: 'forgot-verify', name: 'ForgotVerify', component: () => import('@/views/auth/ForgotVerify.vue') },
       { path: 'forgot-reset', name: 'ForgotReset', component: () => import('@/views/auth/ForgotReset.vue') },

@@ -56,14 +56,8 @@
           </div>
           <div class="spacer-16"></div>
           <div class="form-row">
-            <label>学科</label>
-            <select class="form-input" v-model="createForm.subject">
-              <option value="数学">数学</option>
-              <option value="语文">语文</option>
-              <option value="英语">英语</option>
-              <option value="物理">物理</option>
-              <option value="化学">化学</option>
-            </select>
+            <label>班级介绍</label>
+            <textarea class="form-textarea" v-model="createForm.description" placeholder="请输入班级介绍" rows="4"></textarea>
           </div>
         </div>
         <div class="dialog-footer">
@@ -79,8 +73,13 @@
         <h3 class="dialog-title">加入班级</h3>
         <div class="dialog-body">
           <div class="form-row">
-            <label>班级邀请码</label>
-            <input class="form-input" v-model="joinCode" placeholder="请输入班级邀请码" />
+            <label>班级号</label>
+            <input class="form-input" v-model="joinCode" placeholder="请输入班级号" />
+          </div>
+          <div class="spacer-16"></div>
+          <div class="form-row">
+            <label>验证消息</label>
+            <textarea class="form-textarea" v-model="joinMsg" placeholder="请输入验证消息" rows="4"></textarea>
           </div>
         </div>
         <div class="dialog-footer">
@@ -101,7 +100,8 @@ const joinedClasses = ref([])
 const showCreateDialog = ref(false)
 const showJoinDialog = ref(false)
 const joinCode = ref('')
-const createForm = reactive({ name: '', subject: '数学' })
+const joinMsg = ref('')
+const createForm = reactive({ name: '', description: '' })
 
 async function loadData() {
   try { createdClasses.value = await classApi.getCreatedClasses() } catch {}
@@ -120,7 +120,7 @@ async function handleCreate() {
 async function handleJoin() {
   if (!joinCode.value) return
   try {
-    await classApi.joinClass(joinCode.value)
+    await classApi.joinClass(joinCode.value, joinMsg.value)
     showJoinDialog.value = false
     loadData()
   } catch (e) { alert(e?.response?.data?.message || '加入失败') }
@@ -164,6 +164,7 @@ loadData()
 .form-row { display: flex; flex-direction: column; gap: 8px; }
 .form-row label { font-size: 14px; color: #666; }
 .form-input { width: 100%; height: 40px; padding: 8px 12px; border: 0.8px solid #D1D5DB; border-radius: 4px; font-size: 14px; outline: none; }
+.form-textarea { width: 100%; min-height: 80px; padding: 8px 12px; border: 0.8px solid #D1D5DB; border-radius: 4px; font-size: 14px; outline: none; resize: vertical; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; }
 .dialog-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 0 24px 24px; }
 .btn-cancel { padding: 8px 24px; border: 0.8px solid #D1D5DB; border-radius: 4px; background: #fff; font-size: 14px; cursor: pointer; }
 .btn-confirm { padding: 8px 24px; border: none; border-radius: 4px; background: #2563EB; color: #fff; font-size: 14px; cursor: pointer; }

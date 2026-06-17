@@ -45,7 +45,7 @@
   background: #005538;
   display: flex;
   align-items: center;
-  padding: 0 40px;
+  padding-left: 336px;
   gap: 24px;
 }
 .sub-tab {

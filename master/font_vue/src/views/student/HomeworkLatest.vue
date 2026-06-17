@@ -9,20 +9,10 @@
 
     <!-- 内容区域 -->
     <div class="content-area">
-      <!-- 搜索区域 - 学科选项 -->
       <div class="search-bar">
-        <span class="search-label">学科:</span>
-        <span
-          v-for="opt in subjectOptions"
-          :key="opt.value"
-          class="subject-tag"
-          :class="{ active: searchSubject === opt.value }"
-          @click="searchSubject = searchSubject === opt.value ? '' : opt.value; loadData()"
-        >{{ opt.label }}</span>
+        <span class="search-label">学科：</span>
       </div>
-
       <div class="spacer-24"></div>
-
       <!-- 作业表格 -->
       <table class="data-table">
         <thead>
@@ -77,16 +67,6 @@
 import { ref } from 'vue'
 import { homeworkApi } from '@/api/homework'
 
-const subjectOptions = [
-  { value: '数学', label: '数学' },
-  { value: '语文', label: '语文' },
-  { value: '英语', label: '英语' },
-  { value: '物理', label: '物理' },
-  { value: '化学', label: '化学' },
-  { value: '生物', label: '生物' },
-]
-
-const searchSubject = ref('')
 const homeworkList = ref([])
 const page = ref(1)
 const pageSize = ref(15)
@@ -94,7 +74,7 @@ const totalPages = ref(0)
 
 async function loadData() {
   try {
-    const res = await homeworkApi.getLatestHomework({ page: page.value, pageSize: pageSize.value, subject: searchSubject.value })
+    const res = await homeworkApi.getLatestHomework({ page: page.value, pageSize: pageSize.value })
     homeworkList.value = res.list || []
     totalPages.value = res.totalPages || 0
   } catch {}
@@ -109,40 +89,26 @@ loadData()
 .homework-page { display: flex; flex-direction: column; height: 100%; }
 
 .sub-nav {
-  height: 40px;
+  height: 34px;
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 220px;
+  padding-left: 296px;
   gap: 4px;
 }
 .sub-tab {
-  font-size: 14px; color: #fff; cursor: pointer;
-  padding: 4px 20px; line-height: 32px;
+  font-size: 13px; color: #fff; cursor: pointer;
+  padding: 2px 18px; line-height: 28px;
   border-radius: 9999px;
   transition: background 0.2s;
 }
 .sub-tab:not(.active):hover { background: rgba(255,255,255,0.15); }
 .sub-tab.active { background: #FF7700; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
 
-.content-area { padding: 32px 100px; flex: 1; }
+.content-area { padding: 40px 100px; flex: 1; }
 
-.search-bar { display: flex; align-items: center; gap: 8px; }
-.search-label { font-size: 14px; color: #333; white-space: nowrap; }
-
-.subject-tag {
-  display: inline-block;
-  padding: 4px 14px;
-  border: 0.8px solid #D1D5DB;
-  border-radius: 9999px;
-  font-size: 13px;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s;
-  user-select: none;
-}
-.subject-tag:hover { border-color: #2563EB; color: #2563EB; }
-.subject-tag.active { background: #2563EB; color: #fff; border-color: #2563EB; }
+.search-bar { display: flex; align-items: center; }
+.search-label { font-size: 14px; color: #333; }
 
 .spacer-24 { height: 24px; }
 .sortable { color: #165DFF; cursor: pointer; }

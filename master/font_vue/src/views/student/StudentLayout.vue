@@ -44,7 +44,7 @@ const currentNav = ref('homework')
 
 const navItems = [
   { key: 'homework', label: '我的作业', hasSub: true, path: '/student/homework/latest' },
-  { key: 'classes', label: '我的班级', path: '/student/classes' },
+  { key: 'classes', label: '我加入的班级', path: '/student/classes' },
   { key: 'exercises', label: '习题集', path: '/student/exercises' },
 ]
 
@@ -74,7 +74,7 @@ function goNav(item) {
 }
 
 .nav-left { display: flex; align-items: center; }
-.logo { font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; }
+.logo { width: 200px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
 .nav-spacer { width: 40px; }
 
 .nav-menu { display: flex; align-items: center; height: 60px; }

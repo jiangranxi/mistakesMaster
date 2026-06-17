@@ -81,7 +81,7 @@ function goNav(item) {
 }
 
 .nav-left { display: flex; align-items: center; }
-.logo { font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; }
+.logo { width: 200px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
 .nav-spacer { width: 80px; }
 
 .nav-menu { display: flex; align-items: center; gap: 0; }

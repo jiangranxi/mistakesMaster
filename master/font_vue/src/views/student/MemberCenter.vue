@@ -70,7 +70,7 @@ loadProfile()
 
 <style scoped>
 .member-page { display: flex; height: 100%; }
-.sidebar { width: 200px; background: #EEE; padding-top: 16px; flex-shrink: 0; }
+.sidebar { width: 200px; background: #EEE; padding-top: 16px; flex-shrink: 0; align-self: stretch; }
 .sidebar-title { padding: 16px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #333; }
 .menu-list { padding: 8px 0; }
 .menu-item { padding: 8px 16px; font-size: 14px; color: #2B7CD3; cursor: pointer; }
