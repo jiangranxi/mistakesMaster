@@ -246,3 +246,8 @@ a {
   justify-content: center;
   z-index: 1000;
 }
+
+/* 二级导航胶囊 hover */
+.sub-tab:hover:not(.active) {
+  color: rgba(255,255,255,0.55);
+}

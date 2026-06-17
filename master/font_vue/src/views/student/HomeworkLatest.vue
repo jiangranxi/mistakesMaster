@@ -100,12 +100,11 @@ loadData()
   font-size: 13px; color: #fff; cursor: pointer;
   padding: 2px 18px; line-height: 28px;
   border-radius: 9999px;
-  transition: background 0.2s;
 }
 .sub-tab:not(.active):hover { background: rgba(255,255,255,0.15); }
 .sub-tab.active { background: #FF7700; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
 
-.content-area { padding: 40px 100px; flex: 1; }
+.content-area { padding: 32px 100px; flex: 1; }
 
 .search-bar { display: flex; align-items: center; }
 .search-label { font-size: 14px; color: #333; }

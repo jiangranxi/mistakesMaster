@@ -84,6 +84,7 @@ function goNav(item) {
   font-size: 16px; color: #fff; cursor: pointer; white-space: nowrap;
 }
 .nav-item.active { background: #005538; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
+.nav-item:hover:not(.active) { color: #A8E6C3; }
 
 .nav-right { display: flex; align-items: center; }
 .msg-icon { font-size: 16px; color: #fff; cursor: pointer; }

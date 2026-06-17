@@ -92,7 +92,7 @@ function goNav(item) {
   white-space: nowrap;
 }
 .nav-item.active { background: #005538; }
-.nav-item:hover { background: #005538; }
+.nav-item:hover { background: #005538; color: #A8E6C3; }
 
 .nav-right { display: flex; align-items: center; }
 .msg-icon { font-size: 16px; color: #fff; cursor: pointer; padding: 18px 16px; }
