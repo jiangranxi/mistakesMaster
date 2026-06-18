@@ -27,7 +27,7 @@
 
         <div class="form-field">
           <label class="field-label">出生日期</label>
-          <input class="field-input" v-model="profile.birthday" placeholder="请输入出生日期(2008-06-06)" />
+          <DatePicker v-model="profile.birthday" placeholder="请输入出生日期(2008-06-06)" style="flex: 1" />
         </div>
         <div class="spacer-16"></div>
 
@@ -89,6 +89,7 @@
 <script setup>
 import { reactive } from 'vue'
 import { memberApi } from '@/api/member'
+import DatePicker from '@/components/DatePicker.vue'
 
 const profile = reactive({
   accountId: '', realName: '', birthday: '', gender: '男',
@@ -105,7 +106,7 @@ loadProfile()
 </script>
 
 <style scoped>
-.member-page { display: flex; height: 100%; }
+.member-page { display: flex; flex: 1; min-height: 0; }
 .sidebar { width: 200px; background: #EEE; padding-top: 16px; flex-shrink: 0; align-self: stretch; }
 .sidebar-title { padding: 16px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #333; }
 .menu-list { padding: 8px 0; }

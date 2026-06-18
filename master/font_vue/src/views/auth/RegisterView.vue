@@ -1,8 +1,8 @@
 <template>
-  <div class="page-container">
+  <div class="register-page">
     <h2 class="page-title">用户注册</h2>
     <div class="title-divider"></div>
-    <div class="spacer-32"></div>
+    <div class="spacer-16"></div>
 
     <!-- 身份切换标签 -->
     <div class="tab-switcher-wrapper">
@@ -12,11 +12,11 @@
       </div>
     </div>
 
-    <div class="spacer-32"></div>
-
-    <!-- ========== 老师注册表单 ========== -->
-    <div class="form-wrapper" v-if="isTeacher">
-      <div class="register-form">
+    <div class="spacer-40"></div>
+    <div class="page-container">
+      <!-- ========== 老师注册表单 ========== -->
+      <div class="form-wrapper" v-if="isTeacher">
+        <div class="register-form">
         <!-- 职务 -->
         <div class="form-row">
           <label class="form-label">职务</label>
@@ -154,6 +154,7 @@
     <!-- 点击遮罩关闭选择器 -->
     <div v-if="showJobPicker || showSubjectPicker" class="picker-mask" @click="showJobPicker = false; showSubjectPicker = false"></div>
   </div>
+  </div>
 </template>
 
 <script setup>
@@ -168,7 +169,7 @@ const isTeacher = ref(route.path.includes('teacher'))
 const jobOptions = ['老师', '年级组长', '年级大组长', '校长']
 const subjectOptions = ['数学', '语文', '英语', '物理', '化学', '生物', '地理', '历史', '政治', '道德与法治']
 
-const form = reactive({ job: '', realName: '', password: '', confirmPassword: '', subject: '', phone: '', code: '' })
+const form = reactive({ job: '老师', realName: '', password: '', confirmPassword: '', subject: '数学', phone: '', code: '' })
 const showJobPicker = ref(false)
 const showSubjectPicker = ref(false)
 const codeText = ref('获取验证码')
@@ -185,10 +186,6 @@ function clearError(field) {
 
 function validate() {
   Object.keys(errors).forEach(k => errors[k] = '')
-  if (isTeacher.value) {
-    if (!form.job) { errors.job = '职务为空！'; return false }
-    if (!form.subject) { errors.subject = '学科为空！'; return false }
-  }
   if (!form.realName) { errors.realName = '真实姓名为空！'; return false }
   if (!/^[一-龥a-zA-Z0-9]+$/.test(form.realName)) { errors.realName = '字母、数字、字符、汉字组成'; return false }
   if (!form.password) { errors.password = '密码为空！'; return false }
@@ -252,17 +249,26 @@ async function handleRegister() {
 </script>
 
 <style scoped>
-.page-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 16px 0; background: #fff; }
+.register-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 16px 0; background: #fff; }
 .page-title { font-size: 28px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #333; text-align: center; }
 .title-divider { width: 100%; height: 1px; background: #E5E7EB; margin-top: 12px; }
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  align-items: center;      /* 水平居中 */
+  justify-content: flex-start;
+}
+.spacer-4 { height: 4px; }
 .spacer-16 { height: 16px; }
 .spacer-20 { height: 20px; }
 .spacer-32 { height: 32px; }
 .spacer-40 { height: 40px; }
 
-.tab-switcher-wrapper { padding: 0 320px; }
+.tab-switcher-wrapper { padding: 0 320px; margin-bottom: 8px; }
 .tab-switcher { width: 768px; display: flex; border-bottom: 2px solid #E5E7EB; }
-.tab { flex: 1; padding: 0 0 12px; text-align: center; font-size: 18px; color: #2563EB; cursor: pointer; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; }
+.tab { flex: 1; padding: 2px 0; text-align: center; font-size: 18px; color: #2563EB; cursor: pointer; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; }
 .tab.active { color: #F97316; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; border-bottom: 2px solid #F97316; margin-bottom: -2px; }
 
 .form-wrapper { padding: 0 320px; }
@@ -323,7 +329,7 @@ async function handleRegister() {
 .btn-register { width: calc(768px - 120px - 16px - 200px - 16px); height: 44px; border: none; border-radius: 8px; background: #2563EB; color: #fff; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; }
 .btn-register:hover { background: #3B82F6; }
 
-.has-account { text-align: center; }
+.has-account { padding-left: 136px; }
 .text-gray { font-size: 15px; color: #6B7280; }
 .text-blue { font-size: 15px; color: #2563EB; cursor: pointer; margin-left: 8px; }
 </style>

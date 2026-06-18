@@ -20,8 +20,8 @@
           </div>
           <div class="filter-item">
             <label>时间:</label>
-            <input type="text" v-model="filters.startTime" placeholder="开始时间" class="filter-input" />
-            <input type="text" v-model="filters.endTime" placeholder="结束时间" class="filter-input" />
+            <DatePicker v-model="filters.startTime" placeholder="开始时间" style="width: 180px" />
+            <DatePicker v-model="filters.endTime" placeholder="结束时间" style="width: 180px" />
             <span class="search-btn"><i class="ri-search-line"></i></span>
           </div>
         </div>
@@ -83,6 +83,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import DatePicker from '@/components/DatePicker.vue'
 
 const filters = reactive({
   report: '',
@@ -99,25 +100,54 @@ const tableData = ref([])
 </script>
 
 <style scoped>
-.page { height: 100%; display: flex; flex-direction: column; }
+.page { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
-/* 页签栏 */
+/* 页签栏 — 卡片化标签，左右对齐内容区，中间融合 */
 .tab-bar {
   display: flex;
-  align-items: stretch;
-  padding: 0 64px;
+  align-items: center;
+  padding: 16px 64px 0;
   height: 49px;
+  background: #fff;
 }
 .tab-item {
-  padding: 12px 32px;
+  flex: 1;
+  text-align: center;
+  padding: 12px 24px;
   font-size: 16px;
   font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif;
-  color: #2B7CD3;
+  color: #6B7280;
   cursor: pointer;
-  display: flex;
-  align-items: center;
+  border: 1px solid #E5E7EB;
+  background: #fff;
 }
-.tab-item.active { color: #FF7700; }
+/* 未选中：隐藏顶部线和外边线 */
+.tab-item:first-child {
+  border-right: none;
+  border-radius: 4px 0 0 0;
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.tab-item:last-child {
+  border-radius: 0 4px 0 0;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+/* 选中：显示全部边线 */
+.tab-item.active {
+  color: #FF7700;
+  border-color: #E5E7EB;
+  border-bottom-color: #fff;
+  font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif;
+}
+.tab-item:first-child.active {
+  border-left-color: #E5E7EB;
+  border-top-color: #E5E7EB;
+}
+.tab-item:last-child.active {
+  border-right-color: #E5E7EB;
+  border-top-color: #E5E7EB;
+}
 
 .content-body { padding: 24px 64px 32px; flex: 1; overflow-y: auto; }
 

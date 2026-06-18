@@ -3,7 +3,7 @@
     <!-- 品牌区域 -->
     <div class="brand-area">
       <div class="logo-wrapper">
-        <img class="logo-img" src="@/assets/logo.svg" alt="logo" />
+        <img class="logo-img" src="@/assets/logo.png" alt="logo" />
         <span class="spacer-24"></span>
         <div class="brand-name">
           <span class="brand-title">错题通</span>
@@ -110,7 +110,7 @@ function mockGo(role) {
 }
 
 .brand-area {
-  width: 336px;
+  width: 536px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,9 +123,10 @@ function mockGo(role) {
 }
 
 .logo-img {
-  width: 72px;
-  height: 72px;
+  width: 112px;
+  height: 112px;
   object-fit: contain;
+  margin-top: -20px;
 }
 
 .brand-name {
@@ -135,14 +136,14 @@ function mockGo(role) {
 }
 
 .brand-title {
-  font-size: 48px;
+  font-size: 108px;
   font-family: 'SourceHanSans-ExtraBold', 'Noto Sans SC', sans-serif;
-  color: #006644;
+  color: #00a36d;
   line-height: 1.2;
 }
 
 .brand-subtitle {
-  font-size: 28px;
+  font-size: 32px;
   font-family: 'SourceHanSans-Bold', 'Noto Sans SC', sans-serif;
   color: #9CA3AF;
   line-height: 1.3;

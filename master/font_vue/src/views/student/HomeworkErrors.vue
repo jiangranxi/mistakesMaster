@@ -18,8 +18,8 @@
         </div>
         <div class="filter-item">
           <label>提交时间:</label>
-          <input type="text" v-model="filters.startTime" placeholder="开始时间" class="filter-input" />
-          <input type="text" v-model="filters.endTime" placeholder="结束时间" class="filter-input" />
+          <DatePicker v-model="filters.startTime" placeholder="开始时间" style="width: 200px" />
+          <DatePicker v-model="filters.endTime" placeholder="结束时间" style="width: 200px" />
         </div>
         <span class="search-icon"><i class="ri-search-line"></i></span>
       </div>
@@ -77,6 +77,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { homeworkApi } from '@/api/homework'
+import DatePicker from '@/components/DatePicker.vue'
 
 const list = ref([])
 const page = ref(1)
@@ -113,14 +114,14 @@ loadData()
 </script>
 
 <style scoped>
-.page { display: flex; flex-direction: column; height: 100%; }
+.page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .sub-nav {
   height: 34px;
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 296px;
+  padding-left: 200px;
   gap: 4px;
   flex-shrink: 0;
 }

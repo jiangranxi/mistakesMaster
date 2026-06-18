@@ -19,7 +19,7 @@
         </nav>
       </div>
       <div class="nav-right">
-        <span class="msg-icon" @click="$router.push('/student/messages')">消息</span>
+        <span class="msg-icon" :class="{ active: isMessages }" @click="$router.push('/student/messages')">消息</span>
         <span class="right-spacer"></span>
         <UserDropdown />
       </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import UserDropdown from '@/components/UserDropdown.vue'
 
@@ -52,7 +52,10 @@ watch(() => route.path, (path) => {
   if (path.includes('homework')) currentNav.value = 'homework'
   else if (path.includes('class')) currentNav.value = 'classes'
   else if (path.includes('exercise')) currentNav.value = 'exercises'
+  else currentNav.value = ''
 }, { immediate: true })
+
+const isMessages = computed(() => route.path.includes('/messages'))
 
 function goNav(item) {
   currentNav.value = item.key
@@ -74,21 +77,23 @@ function goNav(item) {
 }
 
 .nav-left { display: flex; align-items: center; }
-.logo { width: 200px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
+.logo { width: 127px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
 .nav-spacer { width: 40px; }
 
-.nav-menu { display: flex; align-items: center; height: 60px; }
+.nav-menu { display: flex; align-items: center; }
 .nav-item {
   display: flex; align-items: center; gap: 4px;
-  padding: 0 24px; height: 100%;
+  padding: 18px 16px;
   font-size: 16px; color: #fff; cursor: pointer; white-space: nowrap;
 }
-.nav-item.active { background: #005538; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
-.nav-item:hover:not(.active) { color: #A8E6C3; }
+.nav-item.active { background: #005538; color: #fff; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
+.nav-item:hover { color: #A8E6C3; }
 
 .nav-right { display: flex; align-items: center; }
-.msg-icon { font-size: 16px; color: #fff; cursor: pointer; }
+.msg-icon { font-size: 16px; color: #fff; cursor: pointer; padding: 18px 16px; }
+.msg-icon:hover { color: #A8E6C3; }
+.msg-icon.active { background: #005538; color: #fff; }
 .right-spacer { width: 20px; }
 
-.main-content { flex: 1; overflow: auto; }
+.main-content { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
 </style>

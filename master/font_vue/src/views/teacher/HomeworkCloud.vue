@@ -65,14 +65,14 @@ const showPermissionModal = ref(false)
 </script>
 
 <style scoped>
-.page { display: flex; flex-direction: column; height: 100%; }
+.page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .sub-nav {
   height: 40px;
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 336px;
+  padding-left: 220px;
   gap: 24px;
   flex-shrink: 0;
 }

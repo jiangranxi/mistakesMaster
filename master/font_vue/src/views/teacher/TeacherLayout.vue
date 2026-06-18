@@ -19,7 +19,7 @@
         </nav>
       </div>
       <div class="nav-right">
-        <span class="msg-icon" @click="$router.push('/teacher/messages')">消息</span>
+        <span class="msg-icon" :class="{ active: isMessages }" @click="$router.push('/teacher/messages')">消息</span>
         <span class="right-spacer"></span>
         <UserDropdown />
       </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import UserDropdown from '@/components/UserDropdown.vue'
 
@@ -43,8 +43,8 @@ const route = useRoute()
 const currentNav = ref('classes')
 
 const navItems = [
-  { key: 'lessonPlans', label: '我的教案', hasSub: true, path: '/teacher/lesson-plans/own' },
-  { key: 'homework', label: '布置作业', hasSub: true, path: '/teacher/homework/own' },
+  { key: 'lessonPlans', label: '我的教案', hasSub: true, path: '/teacher/lesson-plans/cloud' },
+  { key: 'homework', label: '布置作业', hasSub: true, path: '/teacher/homework/cloud' },
   { key: 'review', label: '讲评', path: '/teacher/review/error-book' },
   { key: 'classes', label: '班级管理', path: '/teacher/classes' },
   { key: 'exercises', label: '习题集', path: '/teacher/exercises' },
@@ -59,7 +59,10 @@ watch(() => route.path, (path) => {
   else if (path.includes('class')) currentNav.value = 'classes'
   else if (path.includes('exercise')) currentNav.value = 'exercises'
   else if (path.includes('download')) currentNav.value = 'download'
+  else currentNav.value = ''
 }, { immediate: true })
+
+const isMessages = computed(() => route.path.includes('/messages'))
 
 function goNav(item) {
   currentNav.value = item.key
@@ -81,7 +84,7 @@ function goNav(item) {
 }
 
 .nav-left { display: flex; align-items: center; }
-.logo { width: 200px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
+.logo { width: 80px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
 .nav-spacer { width: 80px; }
 
 .nav-menu { display: flex; align-items: center; gap: 0; }
@@ -91,13 +94,14 @@ function goNav(item) {
   font-size: 16px; color: #fff; cursor: pointer;
   white-space: nowrap;
 }
-.nav-item.active { background: #005538; }
-.nav-item:hover { background: #005538; color: #A8E6C3; }
+.nav-item.active { background: #005538; color: #fff; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
+.nav-item:hover { color: #A8E6C3; }
 
 .nav-right { display: flex; align-items: center; }
 .msg-icon { font-size: 16px; color: #fff; cursor: pointer; padding: 18px 16px; }
-.msg-icon:hover { background: #005538; }
+.msg-icon:hover { color: #A8E6C3; }
+.msg-icon.active { background: #005538; color: #fff; }
 .right-spacer { width: 20px; }
 
-.main-content { flex: 1; overflow: auto; }
+.main-content { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
 </style>

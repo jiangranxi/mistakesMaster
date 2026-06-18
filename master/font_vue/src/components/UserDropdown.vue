@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown-container" ref="container">
-    <div class="trigger" @click="open = !open">
+    <div class="trigger" :class="{ active: open }" @click="open = !open">
       <div class="avatar"><i class="ri-user-3-fill"></i></div>
       <span class="username">{{ authStore.userName }}</span>
       <i class="ri-arrow-down-s-line arrow-icon"></i>
@@ -49,20 +49,22 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 </script>
 
 <style scoped>
-.dropdown-container { position: relative; }
-.trigger { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
-.avatar { width: 32px; height: 32px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+.dropdown-container { position: relative; align-self: stretch; display: flex; align-items: center; }
+.trigger { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; padding: 0 16px; height: 100%; }
+.trigger:hover .username, .trigger:hover .arrow-icon { color: #A8E6C3; }
+.trigger.active { background: #005538; }
+.trigger.active .username, .trigger.active .arrow-icon { color: #fff; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .avatar i { font-size: 20px; color: #006644; }
 .username { font-size: 16px; color: #fff; }
 .arrow-icon { font-size: 16px; color: #fff; }
 
 .dropdown-menu {
   position: absolute;
-  top: 44px;
+  top: calc(100% + 2px);
   right: 0;
-  min-width: 140px;
+  left: 0;
   background: #006644;
-  border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   z-index: 1001;
   overflow: hidden;

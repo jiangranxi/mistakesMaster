@@ -86,14 +86,14 @@ loadData()
 </script>
 
 <style scoped>
-.homework-page { display: flex; flex-direction: column; height: 100%; }
+.homework-page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .sub-nav {
   height: 34px;
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 296px;
+  padding-left: 200px;
   gap: 4px;
 }
 .sub-tab {
