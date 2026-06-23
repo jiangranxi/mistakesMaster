@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed, watch, ref, nextTick } from 'vue'
 import { memberApi } from '@/api/member'
 import { useToast } from '@/composables/useToast'
 import { regionTree } from '@/data/regions'
@@ -100,6 +100,7 @@ const profile = reactive({
   accountId: '', realName: '', birthday: '', gender: '男',
   email: '', phone: '', province: '', city: '', district: '', subject: '数学'
 })
+const loadingProfile = ref(false)
 
 // 地区联动
 const cities = computed(() => {
@@ -112,13 +113,14 @@ const districts = computed(() => {
   const c = cities.value.find(c => c.n === profile.city)
   return c ? c.d : []
 })
-watch(() => profile.province, () => { profile.city = ''; profile.district = '' })
-watch(() => profile.city, () => { profile.district = '' })
+watch(() => profile.province, () => { if (loadingProfile.value) return; profile.city = ''; profile.district = '' })
+watch(() => profile.city, () => { if (loadingProfile.value) return; profile.district = '' })
 
 const allSubjects = ['数学', '语文', '英语', '物理', '化学', '生物', '地理', '历史', '政治', '道德与法治']
 
 async function loadProfile() {
-  try { Object.assign(profile, await memberApi.getProfile()) } catch {}
+  loadingProfile.value = true
+  try { Object.assign(profile, await memberApi.getProfile()) } catch {} finally { await nextTick(); loadingProfile.value = false }
 }
 async function handleSave() {
   try { await memberApi.updateProfile(profile); toast.success('保存成功') } catch { toast.error('保存失败') }

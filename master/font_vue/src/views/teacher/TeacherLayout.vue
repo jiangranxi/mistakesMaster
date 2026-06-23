@@ -45,7 +45,7 @@ const currentNav = ref('lessonPlans')
 const navItems = [
   { key: 'lessonPlans', label: '我的教案', hasSub: true, path: '/teacher/lesson-plans/cloud' },
   { key: 'homework', label: '布置作业', hasSub: true, path: '/teacher/homework/cloud' },
-  { key: 'review', label: '讲评', path: '/teacher/review/error-book' },
+  { key: 'review', label: '讲评', path: '/teacher/review/homework' },
   { key: 'classes', label: '班级管理', path: '/teacher/classes' },
   { key: 'exercises', label: '习题集', path: '/teacher/exercises' },
   { key: 'download', label: '下载客户端', path: '/teacher/download' },
@@ -54,8 +54,8 @@ const navItems = [
 // 根据路由更新当前高亮导航
 watch(() => route.path, (path) => {
   if (path.includes('lesson-plan')) currentNav.value = 'lessonPlans'
-  else if (path.includes('homework')) currentNav.value = 'homework'
   else if (path.includes('review')) currentNav.value = 'review'
+  else if (path.includes('homework')) currentNav.value = 'homework'
   else if (path.includes('class')) currentNav.value = 'classes'
   else if (path.includes('exercise')) currentNav.value = 'exercises'
   else if (path.includes('download')) currentNav.value = 'download'

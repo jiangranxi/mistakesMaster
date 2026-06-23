@@ -151,8 +151,10 @@ loadData()
 }
 
 .add-card { background: #F5F5F5; }
-.add-icon { font-size: 40px; color: #9CA3AF; }
-.add-text { font-size: 16px; color: #999; margin-top: 16px; }
+.add-card:hover .add-icon,
+.add-card:hover .add-text { color: #2563EB; }
+.add-icon { font-size: 40px; color: #9CA3AF; transition: color 0.2s; }
+.add-text { font-size: 16px; color: #999; margin-top: 16px; transition: color 0.2s; }
 
 .class-card { background: #fff; padding: 24px; align-items: flex-start; justify-content: flex-start; }
 .class-card h4 { font-size: 16px; color: #333; margin-bottom: 8px; }

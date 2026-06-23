@@ -14,17 +14,17 @@
       </div>
       <div class="spacer-24"></div>
       <!-- 作业表格 -->
-      <table class="data-table">
+      <table class="data-table" style="table-layout:fixed">
         <thead>
           <tr>
-            <th style="width:131px">序号</th>
-            <th style="width:197px" class="sortable" @click="toggleSort('className')">班级<span class="sort-arrows" :data-sort="sortState['className']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:328px" class="sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:246px" class="sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortState['source']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:164px" class="sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:246px" class="sortable" @click="toggleSort('createTime')">布置作业时间<span class="sort-arrows" :data-sort="sortState['createTime']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:246px" class="sortable" @click="toggleSort('deadline')">要求交作业时间<span class="sort-arrows" :data-sort="sortState['deadline']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:164px">操作</th>
+            <th style="width:80px">序号</th>
+            <th style="width:130px" class="sortable" @click="toggleSort('className')">班级<span class="sort-arrows" :data-sort="sortState['className']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:220px" class="sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortState['source']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:100px" class="sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('createTime')">布置作业时间<span class="sort-arrows" :data-sort="sortState['createTime']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('deadline')">要求交作业时间<span class="sort-arrows" :data-sort="sortState['deadline']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:100px">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -46,19 +46,14 @@
 
       <div class="spacer-24"></div>
 
-      <div class="pagination">
-        <button @click="changePage(1)">首页</button>
-        <button @click="changePage(page - 1)">上一页</button>
-        <button @click="changePage(page + 1)">下一页</button>
-        <button @click="changePage(totalPages)">尾页</button>
-        <input class="page-input" :value="page" @change="e => changePage(Number(e.target.value))" />
-        <span>{{ page }}/{{ totalPages }}</span>
-        <select class="page-size" :value="pageSize" @change="e => { pageSize = Number(e.target.value); loadData() }">
-          <option :value="15">15</option>
-          <option :value="30">30</option>
-          <option :value="50">50</option>
-        </select>
-      </div>
+      <PaginationBar
+        variant="student"
+        :page="page"
+        :pageSize="pageSize"
+        :totalPages="totalPages"
+        @page-change="changePage"
+        @page-size-change="val => { pageSize = val; loadData() }"
+      />
     </div>
   </div>
 </template>
@@ -67,6 +62,7 @@
 import { ref, reactive } from 'vue'
 import { homeworkApi } from '@/api/homework'
 import { useToast } from '@/composables/useToast'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const toast = useToast()
 

@@ -80,22 +80,22 @@
       </div>
 
       <!-- 分页 -->
-      <div class="pagination">
-        <button class="page-btn">首页</button>
-        <button class="page-btn">上一页</button>
-        <button class="page-btn">下一页</button>
-        <button class="page-btn">尾页</button>
-        <span class="page-input">1</span>
-        <span class="page-info">1/1</span>
-        <span class="page-size">15 <i class="ri-arrow-down-s-line"></i></span>
-      </div>
+      <PaginationBar
+        variant="teacher"
+        :page="page"
+        :pageSize="pageSize"
+        :totalPages="totalPages"
+        @page-change="changePage"
+        @page-size-change="val => { pageSize = val }"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import DatePicker from '@/components/DatePicker.vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const filters = reactive({
   report: '',
@@ -109,8 +109,14 @@ const filters = reactive({
 const subjects = ref([])
 const classes = ref([])
 const tableData = ref([])
+const page = ref(1)
+const pageSize = ref(15)
+const totalPages = computed(() => Math.ceil(tableData.value.length / pageSize.value) || 0)
 const sortState = reactive({ date: 'asc', report: 'asc', book: 'asc', max: 'asc', min: 'asc', avg: 'asc', median: 'asc', mode: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+function changePage(p) {
+  if (p >= 1 && p <= totalPages.value) { page.value = p }
+}
 </script>
 
 <style scoped>
@@ -235,13 +241,13 @@ function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 
   text-align: left;
 }
 .data-table th.sortable i { color: #6B7280; margin-left: 4px; font-size: 14px; }
-.col-index { width: 114px; }
-.col-date { width: 148px; }
-.col-report { width: 201px; }
-.col-book { width: 201px; }
-.col-score { width: 174px; }
-.col-mode { width: 148px; }
-.col-action { width: 285px; }
+.col-index { width: 80px; }
+.col-date { width: 100px; }
+.col-report { width: 140px; }
+.col-book { width: 140px; }
+.col-score { width: 120px; }
+.col-mode { width: 100px; }
+.col-action { width: 190px; }
 
 .data-table td {
   height: 37px;
@@ -253,52 +259,4 @@ function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 
 .action-cell { display: flex; gap: 8px; }
 .action-cell a { color: #2B7CD3; text-decoration: none; font-size: 14px; }
 .empty-row td { text-align: center; color: #666; }
-
-/* 分页 */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 24px;
-}
-.page-btn {
-  width: 60px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.page-btn:hover { border-color: #2563EB; color: #2563EB; }
-.page-input {
-  width: 48px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.page-info { font-size: 14px; color: #333; min-width: 22px; text-align: center; }
-.page-size {
-  width: 60px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.page-size i { font-size: 14px; color: #6B7280; }
 </style>

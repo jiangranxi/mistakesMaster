@@ -26,6 +26,10 @@ async def update_profile(
     db: AsyncSession = Depends(get_db),
 ):
     """修改个人资料"""
+    print("-----------------------")
+    print(req)
+    print(current_user)
+    print("-----------------------")
     service = MemberService(db)
     return await service.update_profile(current_user, req.model_dump(exclude_none=True))
 
@@ -47,9 +51,13 @@ async def get_orders(
     page: int = Query(default=1, ge=1),
     pageSize: int = Query(default=15, ge=1, le=100),
     status: str = Query(default="all"),
+    sortField: str | None = Query(default=None),
+    sortOrder: str | None = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """订单列表"""
+    """订单列表（支持多列独立分层排序）"""
     service = MemberService(db)
-    return await service.get_orders(current_user.id, page, pageSize, status)
+    return await service.get_orders(
+        current_user.id, page, pageSize, status, sortField, sortOrder,
+    )

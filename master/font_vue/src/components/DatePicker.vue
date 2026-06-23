@@ -252,9 +252,12 @@ function confirm() {
 .clear-icon {
   position: absolute;
   right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 16px;
   color: #9CA3AF;
   cursor: pointer;
+  line-height: 1;
 }
 .clear-icon:hover { color: #6B7280; }
 

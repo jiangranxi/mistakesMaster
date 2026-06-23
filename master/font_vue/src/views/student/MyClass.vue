@@ -74,8 +74,10 @@ loadData()
 .class-card h4 { font-size: 16px; color: #333; margin-bottom: 8px; }
 .class-card p { font-size: 14px; color: #666; }
 .add-card { background: #F5F5F5; cursor: pointer; }
-.add-icon { font-size: 40px; color: #9CA3AF; }
-.add-text { font-size: 16px; color: #999; margin-top: 16px; }
+.add-card:hover .add-icon,
+.add-card:hover .add-text { color: #2563EB; }
+.add-icon { font-size: 40px; color: #9CA3AF; transition: color 0.2s; }
+.add-text { font-size: 16px; color: #999; margin-top: 16px; transition: color 0.2s; }
 .dialog-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
 .dialog { background: #fff; border-radius: 8px; width: 480px; }
 .dialog-title { padding: 24px 24px 0; font-size: 18px; color: #333; }

@@ -50,28 +50,35 @@
         </div>
 
         <!-- 分页 -->
-        <div class="pagination">
-          <button class="page-btn">首页</button>
-          <button class="page-btn">上一页</button>
-          <button class="page-btn">下一页</button>
-          <button class="page-btn">尾页</button>
-          <span class="page-input">1</span>
-          <span class="page-info">1/0</span>
-          <span class="page-size">15 <i class="ri-arrow-down-s-line"></i></span>
-        </div>
+        <PaginationBar
+          variant="teacher"
+          :page="pagination.page"
+          :pageSize="pagination.pageSize"
+          :totalPages="totalPages"
+          @page-change="goPage"
+          @page-size-change="val => { pagination.pageSize = val; fetchData() }"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { lessonPlanApi } from '@/api/lessonPlan'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const tableData = ref([])
 const pagination = ref({ page: 1, pageSize: 15, total: 0 })
 const sortState = reactive({ name: 'asc', size: 'asc', time: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc'; fetchData() }
+
+const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize) || 0)
+function goPage(p) {
+  if (p < 1 || p > totalPages.value) return
+  pagination.value.page = p
+  fetchData()
+}
 
 async function fetchData() {
   try {
@@ -222,57 +229,4 @@ onMounted(() => fetchData())
   color: #666;
   height: 53px;
 }
-
-/* 分页 */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 24px;
-}
-.page-btn {
-  width: 60px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.page-btn:hover { border-color: #2563EB; color: #2563EB; }
-.page-input {
-  width: 48px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.page-info {
-  font-size: 14px;
-  color: #333;
-  min-width: 22px;
-  text-align: center;
-}
-.page-size {
-  width: 60px;
-  height: 36px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.page-size i { font-size: 14px; color: #6B7280; }
 </style>

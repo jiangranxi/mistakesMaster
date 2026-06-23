@@ -17,18 +17,14 @@
 
       <div class="pagination-bar">
         <span class="count-info">数量: {{ pagination.total }}</span>
-        <div class="pagination">
-          <button class="page-btn" :disabled="pagination.page <= 1" @click="goPage(1)">首页</button>
-          <button class="page-btn" :disabled="pagination.page <= 1" @click="goPage(pagination.page - 1)">上一页</button>
-          <button class="page-btn active-page">{{ pagination.page }}</button>
-          <button class="page-btn" :disabled="pagination.page >= totalPages" @click="goPage(pagination.page + 1)">下一页</button>
-          <button class="page-btn" :disabled="pagination.page >= totalPages" @click="goPage(totalPages)">尾页</button>
-          <span class="page-input">{{ pagination.page }}</span>
-          <span class="page-info">{{ pagination.page }}/{{ totalPages || 1 }}</span>
-          <select class="page-size-select" v-model.number="pagination.pageSize" @change="loadData">
-            <option v-for="n in pageSizes" :key="n" :value="n">{{ n }}</option>
-          </select>
-        </div>
+        <PaginationBar
+          variant="teacher"
+          :page="pagination.page"
+          :pageSize="pagination.pageSize"
+          :totalPages="totalPages"
+          @page-change="goPage"
+          @page-size-change="val => { pagination.pageSize = val; loadData() }"
+        />
       </div>
     </div>
 
@@ -75,6 +71,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { exerciseApi } from '@/api/exercise'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const list = ref([])
 const pagination = ref({ page: 1, pageSize: 4, total: 0 })
@@ -82,12 +79,6 @@ const detailVisible = ref(false)
 const currentBook = ref(null)
 
 const totalPages = computed(() => Math.ceil(pagination.value.total / pagination.value.pageSize) || 0)
-const pageSizes = computed(() => {
-  const sizes = []
-  for (let i = 4; i <= 40; i += 4) sizes.push(i)
-  return sizes
-})
-
 function goPage(p) {
   if (p < 1 || p > totalPages.value) return
   pagination.value.page = p
@@ -144,31 +135,6 @@ onMounted(() => loadData())
   display: flex; align-items: center; justify-content: space-between;
 }
 .count-info { font-size: 14px; color: #333; }
-.pagination { display: flex; align-items: center; gap: 8px; }
-.page-btn {
-  min-width: 60px; height: 36px;
-  border: 1px solid #E5E7EB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-btn:hover:not(:disabled) { border-color: #2563EB; color: #2563EB; }
-.page-btn:disabled { color: #ccc; cursor: not-allowed; }
-.page-btn.active-page { width: 36px; min-width: 36px; background: #EEE; border-color: #D1D5DB; }
-.page-input {
-  width: 48px; height: 36px;
-  border: 1px solid #E5E7EB; background: #fff;
-  font-size: 14px; color: #333;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-info { font-size: 14px; color: #333; min-width: 22px; text-align: center; }
-.page-size-select {
-  width: 60px; height: 36px;
-  border: 1px solid #E5E7EB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer; outline: none;
-  text-align: center; appearance: none; padding-right: 16px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236B7280' d='M12 16l-6-6h12z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 4px center;
-}
 
 .detail-overlay { position: fixed; inset: 0; background: #F5F5F5; z-index: 1000; overflow-y: auto; }
 .detail-panel { min-height: 100vh; }

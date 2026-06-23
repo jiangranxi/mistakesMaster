@@ -25,20 +25,30 @@
       </tbody>
     </table>
     <div class="spacer-24"></div>
-    <div class="pagination">
-      <button>首页</button><button>上一页</button><button>下一页</button><button>尾页</button>
-      <input class="page-input" value="0" /><span>0/0</span>
-      <select class="page-size"><option>15</option></select>
-    </div>
+    <PaginationBar
+      variant="student"
+      :page="page"
+      :pageSize="pageSize"
+      :totalPages="totalPages"
+      @page-change="changePage"
+      @page-size-change="val => { pageSize = val }"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue'
 import { messageApi } from '@/api/message'
+import PaginationBar from '@/components/PaginationBar.vue'
 const list = ref([])
+const page = ref(1)
+const pageSize = ref(15)
+const totalPages = ref(0)
 const sortState = reactive({ from: 'asc', role: 'asc', content: 'asc', time: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+function changePage(p) {
+  if (p >= 1 && p <= totalPages.value) { page.value = p }
+}
 async function loadData() { try { const res = await messageApi.getMessages(); list.value = res.list || [] } catch {} }
 async function markRead(item) { try { await messageApi.markRead(item.id); item.read = true } catch {} }
 loadData()

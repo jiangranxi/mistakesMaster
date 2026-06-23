@@ -62,27 +62,23 @@
       </div>
 
       <!-- 分页 -->
-      <div class="pagination-bar">
-        <div class="pagination">
-          <button class="page-btn" :disabled="page <= 1" @click="changePage(1)">首页</button>
-          <button class="page-btn" :disabled="page <= 1" @click="changePage(page - 1)">上一页</button>
-          <button class="page-btn" :disabled="page >= totalPages" @click="changePage(page + 1)">下一页</button>
-          <button class="page-btn" :disabled="page >= totalPages" @click="changePage(totalPages)">尾页</button>
-          <span class="page-input">{{ page }}</span>
-          <span class="page-info">{{ page }}/{{ totalPages || 0 }}</span>
-          <select class="page-size-select" v-model.number="pageSize" @change="loadData">
-            <option v-for="n in pageSizes" :key="n" :value="n">{{ n }}</option>
-          </select>
-        </div>
-      </div>
+      <PaginationBar
+        variant="student"
+        :page="page"
+        :pageSize="pageSize"
+        :totalPages="totalPages"
+        @page-change="changePage"
+        @page-size-change="val => { pageSize = val; loadData() }"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { homeworkApi } from '@/api/homework'
 import DatePicker from '@/components/DatePicker.vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const list = ref([])
 const page = ref(1)
@@ -91,12 +87,6 @@ const totalPages = ref(0)
 const sortState = reactive({ submitTime: 'asc', name: 'asc', source: 'asc', subject: 'asc', totalScore: 'asc', myScore: 'asc', rank: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
 const filters = reactive({ book: '', name: '', time: '' })
-
-const pageSizes = computed(() => {
-  const sizes = []
-  for (let i = 4; i <= 40; i += 4) sizes.push(i)
-  return sizes
-})
 
 async function loadData() {
   try {
@@ -178,13 +168,13 @@ loadData()
 }
 .data-table th.sortable { color: #165DFF; cursor: pointer; }
 .data-table th.sortable i { font-size: 16px; }
-.col-index { width: 120px; }
-.col-time { width: 180px; }
-.col-name { width: 299px; }
-.col-source { width: 225px; }
-.col-subject { width: 150px; }
-.col-score { width: 150px; }
-.col-action { width: 150px; }
+.col-index { width: 80px; }
+.col-time { width: 120px; }
+.col-name { width: 200px; }
+.col-source { width: 150px; }
+.col-subject { width: 100px; }
+.col-score { width: 100px; }
+.col-action { width: 100px; }
 
 .data-table td {
   font-size: 14px; color: #333;
@@ -193,31 +183,4 @@ loadData()
 }
 .data-table td a { color: #2B7CD3; text-decoration: none; }
 .empty-row td { text-align: center; color: #999; padding: 32px 16px; height: 86px; }
-
-/* 分页 */
-.pagination-bar { margin-top: 24px; display: flex; justify-content: flex-end; }
-.pagination { display: flex; align-items: center; gap: 8px; }
-.page-btn {
-  min-width: 70px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-btn:hover:not(:disabled) { border-color: #2563EB; color: #2563EB; }
-.page-btn:disabled { color: #ccc; cursor: not-allowed; }
-.page-input {
-  width: 60px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-info { font-size: 14px; color: #333; min-width: 23px; text-align: center; margin: 0 2px; }
-.page-size-select {
-  width: 70px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer; outline: none;
-  text-align: center; appearance: none; padding-right: 16px; margin-left: 2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236B7280' d='M12 16l-6-6h12z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 4px center;
-}
 </style>

@@ -26,20 +26,31 @@
       <div class="form">
         <div class="form-row">
           <label class="form-label">手机</label>
-          <input class="form-input" v-model="phone" placeholder="手机" />
-          <span class="spacer-16-h"></span>
-          <span class="hint">请输入手机号</span>
+          <input
+            class="form-input"
+            :class="{ 'input-error': errors.phone }"
+            v-model="phone"
+            placeholder="请输入手机号"
+            maxlength="11"
+            @focus="clearError('phone')"
+          />
+          <span class="hint" :class="{ 'hint-error': errors.phone }">{{ errors.phone || '请输入手机号' }}</span>
         </div>
-        <div class="spacer-32"></div>
+        <div class="spacer-16"></div>
 
         <div class="form-row">
           <label class="form-label">验证码</label>
-          <div class="code-group">
-            <input class="code-input" v-model="code" placeholder="验证码" />
+          <input
+            class="form-input"
+            :class="{ 'input-error': errors.code }"
+            v-model="code"
+            placeholder="验证码"
+            @focus="clearError('code')"
+          />
+          <div class="code-area">
+            <span class="hint-inline" v-if="errors.code">{{ errors.code }}</span>
             <button class="btn-code" @click="sendCode">{{ codeText }}</button>
           </div>
-          <span class="spacer-16-h"></span>
-          <span class="hint"></span>
         </div>
 
         <div class="spacer-48"></div>
@@ -53,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { authApi } from '@/api/auth'
 import { useToast } from '@/composables/useToast'
@@ -65,20 +76,57 @@ const phone = ref('')
 const code = ref('')
 const codeText = ref('获取验证码')
 const codeSending = ref(false)
+const errors = reactive({})
+
+function clearError(field) {
+  errors[field] = ''
+}
 
 async function sendCode() {
-  if (!phone.value || codeSending.value) return
+  if (codeSending.value) return
+  if (!phone.value) {
+    errors.phone = '手机号为空！'
+    return
+  }
+  if (!/^\d{11}$/.test(phone.value)) {
+    errors.phone = '手机号格式不正确'
+    return
+  }
+  errors.phone = ''
   codeSending.value = true
   try {
-    await authApi.sendForgotCode(phone.value)
+    const res = await authApi.sendForgotCode(phone.value)
+    if (res?.message) toast.info(res.message)
     let count = 60
     codeText.value = `${count}s`
-    const timer = setInterval(() => { count--; codeText.value = `${count}s`; if (count <= 0) { clearInterval(timer); codeText.value = '获取验证码'; codeSending.value = false } }, 1000)
-  } catch { codeText.value = '获取验证码'; codeSending.value = false }
+    const timer = setInterval(() => {
+      count--
+      codeText.value = `${count}s`
+      if (count <= 0) {
+        clearInterval(timer)
+        codeText.value = '获取验证码'
+        codeSending.value = false
+      }
+    }, 1000)
+  } catch {
+    codeText.value = '获取验证码'
+    codeSending.value = false
+  }
 }
 
 async function handleSubmit() {
-  if (!phone.value || !code.value) return
+  if (!phone.value) {
+    errors.phone = '手机号为空！'
+    return
+  }
+  if (!/^\d{11}$/.test(phone.value)) {
+    errors.phone = '手机号格式不正确'
+    return
+  }
+  if (!code.value) {
+    errors.code = '验证码为空！'
+    return
+  }
   try {
     await authApi.verifyUser({ phone: phone.value, code: code.value })
     router.push('/auth/forgot-verify')
@@ -91,8 +139,7 @@ async function handleSubmit() {
 <style scoped>
 .page-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 48px 16px; background: #fff; }
 .page-title { font-size: 32px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #6B7280; }
-.spacer-16-h { width: 16px; flex-shrink: 0; }
-.spacer-32 { height: 32px; }
+.spacer-16 { height: 16px; }
 .spacer-48 { height: 48px; }
 .spacer-64 { height: 64px; }
 
@@ -110,13 +157,34 @@ async function handleSubmit() {
 .form-wrapper { padding: 0 320px; }
 .form { width: 768px; display: flex; flex-direction: column; }
 .form-row { display: flex; align-items: center; }
-.form-label { width: 128px; text-align: right; font-size: 16px; color: #374151; }
-.form-input { flex: 1; height: 44px; padding: 12px 16px; border: 0.8px solid #D1D5DB; border-radius: 4px; font-size: 16px; color: #374151; outline: none; }
+.form-label { width: 120px; padding-right: 16px; text-align: right; font-size: 15px; color: #374151; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; flex-shrink: 0; }
+
+.form-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 14px;
+  border: 0.8px solid #D1D5DB;
+  border-radius: 4px;
+  font-size: 15px;
+  color: #374151;
+  font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif;
+  outline: none;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.form-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 .form-input::placeholder { color: #9CA3AF; }
-.hint { width: 224px; font-size: 14px; color: #6B7280; }
-.code-group { flex: 1; display: flex; }
-.code-input { flex: 1; height: 44px; padding: 12px 16px; border: 0.8px solid #D1D5DB; border-radius: 4px 0 0 4px; font-size: 16px; outline: none; }
-.btn-code { width: 192px; height: 44px; border: none; border-radius: 0 4px 4px 0; background: #22C55E; color: #fff; font-size: 16px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; }
-.btn-wrapper { padding: 0 160px; }
-.btn-submit { width: 448px; height: 60px; border: none; border-radius: 8px; background: #60A5FA; color: #fff; font-size: 20px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; }
+.form-input.input-error { border-color: #EF4444; }
+.form-input.input-error:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
+
+.hint { width: 200px; margin-left: 16px; font-size: 13px; color: #B0B0B0; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; flex-shrink: 0; }
+.hint.hint-error { color: #EF4444; }
+
+.code-area { width: 200px; margin-left: 16px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.hint-inline { font-size: 13px; color: #EF4444; font-family: 'SourceHanSans-Regular', 'Noto Sans SC', sans-serif; margin-bottom: 4px; }
+.btn-code { height: 40px; padding: 0 16px; border: none; border-radius: 4px; background: #22C55E; color: #fff; font-size: 13px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; white-space: nowrap; }
+.btn-code:hover { background: #16A34A; }
+
+.btn-wrapper { padding-left: 136px; }
+.btn-submit { width: calc(768px - 120px - 16px - 200px - 16px); height: 44px; border: none; border-radius: 8px; background: #2563EB; color: #fff; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; }
+.btn-submit:hover { background: #3B82F6; }
 </style>

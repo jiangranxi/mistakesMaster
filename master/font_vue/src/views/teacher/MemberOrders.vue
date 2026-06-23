@@ -63,24 +63,22 @@
       <div class="spacer-24"></div>
 
       <!-- 分页 -->
-      <div class="pagination">
-        <button class="page-btn" :disabled="page <= 1" @click="changePage(1)">首页</button>
-        <button class="page-btn" :disabled="page <= 1" @click="changePage(page - 1)">上一页</button>
-        <button class="page-btn" :disabled="page >= totalPages" @click="changePage(page + 1)">下一页</button>
-        <button class="page-btn" :disabled="page >= totalPages" @click="changePage(totalPages)">尾页</button>
-        <span class="page-input">{{ page }}</span>
-        <span class="page-info">{{ page }}/{{ totalPages || 0 }}</span>
-        <select class="page-size-select" v-model.number="pageSize" @change="loadData">
-          <option v-for="n in pageSizes" :key="n" :value="n">{{ n }}</option>
-        </select>
-      </div>
+      <PaginationBar
+        variant="student"
+        :page="page"
+        :pageSize="pageSize"
+        :totalPages="totalPages"
+        @page-change="changePage"
+        @page-size-change="val => { pageSize = val; loadData() }"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { memberApi } from '@/api/member'
+import PaginationBar from '@/components/PaginationBar.vue'
 
 const activeTab = ref('all')
 const orderTabs = [
@@ -96,12 +94,6 @@ const pageSize = ref(15)
 const totalPages = ref(0)
 const sortState = reactive({ orderNo: 'asc', name: 'asc', resourceType: 'asc', price: 'asc', status: 'asc', time: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
-
-const pageSizes = computed(() => {
-  const sizes = []
-  for (let i = 4; i <= 40; i += 4) sizes.push(i)
-  return sizes
-})
 
 async function loadData() {
   try {
@@ -168,14 +160,14 @@ loadData()
 }
 .data-table th.sortable { color: #165DFF; cursor: pointer; }
 .data-table th.sortable i { font-size: 16px; margin-left: 4px; }
-.col-index { width: 130px; }
-.col-order { width: 244px; }
-.col-name { width: 325px; }
-.col-type { width: 195px; }
-.col-price { width: 163px; }
-.col-status { width: 163px; }
-.col-time { width: 244px; }
-.col-action { width: 163px; }
+.col-index { width: 80px; }
+.col-order { width: 160px; }
+.col-name { width: 215px; }
+.col-type { width: 130px; }
+.col-price { width: 100px; }
+.col-status { width: 100px; }
+.col-time { width: 160px; }
+.col-action { width: 100px; }
 
 .data-table td {
   font-size: 14px;
@@ -185,30 +177,4 @@ loadData()
 }
 .data-table td a { color: #2B7CD3; text-decoration: none; }
 .empty-row td { text-align: center; color: #999; height: 86px; padding: 32px 16px; }
-
-/* 分页 */
-.pagination { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-.page-btn {
-  min-width: 70px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-btn:hover:not(:disabled) { border-color: #2563EB; color: #2563EB; }
-.page-btn:disabled { color: #ccc; cursor: not-allowed; }
-.page-input {
-  width: 60px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333;
-  display: flex; align-items: center; justify-content: center;
-}
-.page-info { font-size: 14px; color: #333; min-width: 23px; text-align: center; margin: 0 2px; }
-.page-size-select {
-  width: 70px; height: 36px;
-  border: 1px solid #D1D5DB; background: #fff;
-  font-size: 14px; color: #333; cursor: pointer; outline: none;
-  text-align: center; appearance: none; padding-right: 16px; margin-left: 2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%236B7280' d='M12 16l-6-6h12z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 4px center;
-}
 </style>

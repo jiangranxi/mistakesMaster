@@ -22,25 +22,27 @@
     <div class="spacer-24"></div>
 
     <!-- 分页 -->
-    <div class="pagination">
-      <button>首页</button>
-      <button>上一页</button>
-      <button>下一页</button>
-      <button>尾页</button>
-      <input class="page-input" value="0" />
-      <span>0/0</span>
-      <select class="page-size">
-        <option>15</option>
-        <option>30</option>
-        <option>50</option>
-      </select>
-    </div>
+    <PaginationBar
+      variant="teacher"
+      :page="page"
+      :pageSize="pageSize"
+      :totalPages="totalPages"
+      @page-change="changePage"
+      @page-size-change="val => { pageSize = val }"
+    />
   </div>
 </template>
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import PaginationBar from '@/components/PaginationBar.vue'
 const sortState = reactive({ from: 'asc', role: 'asc', content: 'asc', time: 'asc' })
 function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+const page = ref(1)
+const pageSize = ref(15)
+const totalPages = ref(0)
+function changePage(p) {
+  if (p >= 1 && p <= totalPages.value) { page.value = p }
+}
 </script>
 
 <style scoped>
