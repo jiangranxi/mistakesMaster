@@ -79,6 +79,8 @@
         </table>
       </div>
 
+      <div class="spacer-16"></div>
+
       <!-- 分页 -->
       <PaginationBar
         variant="teacher"
@@ -259,4 +261,5 @@ function changePage(p) {
 .action-cell { display: flex; gap: 8px; }
 .action-cell a { color: #2B7CD3; text-decoration: none; font-size: 14px; }
 .empty-row td { text-align: center; color: #666; }
+.spacer-16 { height: 16px; }
 </style>

@@ -44,7 +44,7 @@
         </tbody>
       </table>
 
-      <div class="spacer-24"></div>
+      <div class="spacer-16"></div>
 
       <PaginationBar
         variant="student"
@@ -90,7 +90,7 @@ loadData()
 .homework-page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .sub-nav {
-  height: 34px;
+  height: 40px;
   background: #005538;
   display: flex;
   align-items: center;
@@ -103,13 +103,13 @@ loadData()
   border-radius: 9999px;
 }
 .sub-tab:not(.active):hover { background: rgba(255,255,255,0.15); }
-.sub-tab.active { background: #FF7700; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
+.sub-tab.active { background: #FF6600; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; }
 
 .content-area { padding: 32px 100px; flex: 1; }
 
 .search-bar { display: flex; align-items: center; }
 .search-label { font-size: 14px; color: #333; }
 
-.spacer-24 { height: 24px; }
+.spacer-16 { height: 16px; }
 .sortable { color: #165DFF; cursor: pointer; }
 </style>

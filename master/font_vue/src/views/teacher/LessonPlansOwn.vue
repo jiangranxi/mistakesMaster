@@ -49,6 +49,8 @@
           </table>
         </div>
 
+        <div class="spacer-16"></div>
+
         <!-- 分页 -->
         <PaginationBar
           variant="teacher"
@@ -107,8 +109,8 @@ onMounted(() => fetchData())
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 220px;
-  gap: 24px;
+  padding-left: 200px;
+  gap: 4px;
   flex-shrink: 0;
 }
 .sub-tab {
@@ -118,6 +120,7 @@ onMounted(() => fetchData())
   padding: 6px 16px;
   border-radius: 9999px;
 }
+.sub-tab:not(.active):hover { background: rgba(255,255,255,0.15); }
 .sub-tab.active { background: #FF6600; }
 
 .content-area {
@@ -229,4 +232,5 @@ onMounted(() => fetchData())
   color: #666;
   height: 53px;
 }
+.spacer-16 { height: 16px; }
 </style>

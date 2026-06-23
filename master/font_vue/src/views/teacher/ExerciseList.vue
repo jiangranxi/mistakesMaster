@@ -15,6 +15,8 @@
         </div>
       </div>
 
+      <hr class="divider" />
+
       <div class="pagination-bar">
         <span class="count-info">数量: {{ pagination.total }}</span>
         <PaginationBar
@@ -74,7 +76,7 @@ import { exerciseApi } from '@/api/exercise'
 import PaginationBar from '@/components/PaginationBar.vue'
 
 const list = ref([])
-const pagination = ref({ page: 1, pageSize: 4, total: 0 })
+const pagination = ref({ page: 1, pageSize: 15, total: 0 })
 const detailVisible = ref(false)
 const currentBook = ref(null)
 
@@ -131,7 +133,7 @@ onMounted(() => loadData())
 }
 
 .pagination-bar {
-  margin-top: 32px; padding-top: 16px;
+  margin-top: 0px; padding-top: 0px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .count-info { font-size: 14px; color: #333; }
@@ -156,4 +158,11 @@ onMounted(() => loadData())
 .chapter-item { display: flex; align-items: center; gap: 8px; }
 .chapter-item i { font-size: 16px; color: #6B7280; }
 .chapter-item a { font-size: 16px; color: #2B7CD3; text-decoration: none; }
+.divider {
+  border: none;           /* 去掉默认边框 */
+  height: 1px;            /* 线条粗细 */
+  background-color: #e0e0e0; /* 线条颜色 */
+  margin: 20px 0;         /* 上下间距，左右为0实现充满 */
+  width: 100%;            /* 宽度100%填满父容器 */
+}
 </style>

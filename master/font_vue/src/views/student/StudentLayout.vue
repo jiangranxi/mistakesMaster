@@ -72,13 +72,13 @@ function goNav(item) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 40px;
   flex-shrink: 0;
 }
 
 .nav-left { display: flex; align-items: center; }
-.logo { width: 127px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
-.nav-spacer { width: 40px; }
+.logo { width: 80px; font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #fff; flex-shrink: 0; }
+.nav-spacer { width: 80px; }
 
 .nav-menu { display: flex; align-items: center; }
 .nav-item {

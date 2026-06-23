@@ -72,8 +72,8 @@ const showPermissionModal = ref(false)
   background: #005538;
   display: flex;
   align-items: center;
-  padding-left: 220px;
-  gap: 24px;
+  padding-left: 200px;
+  gap: 4px;
   flex-shrink: 0;
 }
 .sub-tab {
@@ -83,6 +83,7 @@ const showPermissionModal = ref(false)
   padding: 6px 16px;
   border-radius: 9999px;
 }
+.sub-tab:not(.active):hover { background: rgba(255,255,255,0.15); }
 .sub-tab.active { background: #FF6600; }
 
 .content-area {

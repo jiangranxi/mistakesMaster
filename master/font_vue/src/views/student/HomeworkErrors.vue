@@ -56,6 +56,8 @@
         </table>
       </div>
 
+      <div class="spacer-16"></div>
+
       <!-- 分页 -->
       <PaginationBar
         variant="student"
@@ -109,7 +111,7 @@ loadData()
 .page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .sub-nav {
-  height: 34px;
+  height: 40px;
   background: #005538;
   display: flex;
   align-items: center;
@@ -125,7 +127,7 @@ loadData()
 }
 .sub-tab:hover:not(.active) { background: rgba(255,255,255,0.15); }
 .sub-tab.active {
-  background: #FF7700;
+  background: #FF6600;
   font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif;
 }
 
@@ -175,6 +177,7 @@ loadData()
   padding: 12px 16px;
   border: 1px solid #E5E7EB;
 }
+.spacer-16 { height: 16px; }
 .data-table td a { color: #2B7CD3; text-decoration: none; }
 .empty-row td { text-align: center; color: #999; padding: 32px 16px; height: 86px; }
 </style>

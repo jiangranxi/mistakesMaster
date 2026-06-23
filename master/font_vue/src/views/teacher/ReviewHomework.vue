@@ -67,6 +67,8 @@
         </table>
       </div>
 
+      <div class="spacer-16"></div>
+
       <!-- 分页 -->
       <PaginationBar
         variant="teacher"
@@ -247,4 +249,5 @@ function changePage(p) {
   border: 1px solid #E5E7EB;
 }
 .empty-row td { text-align: center; color: #666; }
+.spacer-16 { height: 16px; }
 </style>
