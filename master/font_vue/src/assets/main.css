@@ -178,7 +178,31 @@ a {
 .data-table th.sortable {
   color: var(--color-blue-dark);
   cursor: pointer;
+  user-select: none;
 }
+/* 排序双三角箭头 */
+.sort-arrows {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  margin-left: 2px;
+  line-height: 0;
+  gap: 1px;
+}
+.sort-arrow {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  transition: border-color 0.15s;
+}
+.sort-arrow.up    { border-bottom: 5px solid #999; }
+.sort-arrow.down  { border-top: 5px solid #999; }
+.sort-arrows[data-sort="asc"]  .sort-arrow.up   { border-bottom-color: #165DFF; }
+.sort-arrows[data-sort="asc"]  .sort-arrow.down { border-top-color: #999; }
+.sort-arrows[data-sort="desc"] .sort-arrow.down { border-top-color: #165DFF; }
+.sort-arrows[data-sort="desc"] .sort-arrow.up   { border-bottom-color: #999; }
 .data-table td {
   padding: 12px 16px;
   font-size: 14px;

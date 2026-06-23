@@ -25,7 +25,7 @@ const routes = [
     component: () => import('@/views/teacher/TeacherLayout.vue'),
     meta: { requiresAuth: true, role: 'teacher' },
     children: [
-      { path: '', redirect: '/teacher/classes' },
+      { path: '', redirect: '/teacher/lesson-plans/cloud' },
       { path: 'classes', name: 'TeacherClasses', component: () => import('@/views/teacher/ClassList.vue') },
       { path: 'review/error-book', name: 'ReviewErrorBook', component: () => import('@/views/teacher/ReviewErrorBook.vue') },
       { path: 'review/homework', name: 'ReviewHomework', component: () => import('@/views/teacher/ReviewHomework.vue') },

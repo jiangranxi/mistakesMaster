@@ -18,12 +18,12 @@
         <thead>
           <tr>
             <th style="width:131px">序号</th>
-            <th style="width:197px" class="sortable">班级 <i class="ri-arrow-up-down-line"></i></th>
-            <th style="width:328px" class="sortable">作业名称 <i class="ri-arrow-up-down-line"></i></th>
-            <th style="width:246px" class="sortable">作业来源 <i class="ri-arrow-up-down-line"></i></th>
-            <th style="width:164px" class="sortable">学科 <i class="ri-arrow-up-down-line"></i></th>
-            <th style="width:246px" class="sortable">布置作业时间 <i class="ri-arrow-up-down-line"></i></th>
-            <th style="width:246px" class="sortable">要求交作业时间 <i class="ri-arrow-up-down-line"></i></th>
+            <th style="width:197px" class="sortable" @click="toggleSort('className')">班级<span class="sort-arrows" :data-sort="sortKey==='className'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:328px" class="sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortKey==='name'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:246px" class="sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortKey==='source'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:164px" class="sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortKey==='subject'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:246px" class="sortable" @click="toggleSort('createTime')">布置作业时间<span class="sort-arrows" :data-sort="sortKey==='createTime'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:246px" class="sortable" @click="toggleSort('deadline')">要求交作业时间<span class="sort-arrows" :data-sort="sortKey==='deadline'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
             <th style="width:164px">操作</th>
           </tr>
         </thead>
@@ -66,11 +66,20 @@
 <script setup>
 import { ref } from 'vue'
 import { homeworkApi } from '@/api/homework'
+import { useToast } from '@/composables/useToast'
+
+const toast = useToast()
 
 const homeworkList = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
+const sortKey = ref('className')
+const sortDir = ref('asc')
+function toggleSort(key) {
+  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
+  else { sortKey.value = key; sortDir.value = 'asc' }
+}
 
 async function loadData() {
   try {
@@ -80,7 +89,7 @@ async function loadData() {
   } catch {}
 }
 function changePage(p) { if (p >= 1 && p <= totalPages.value) { page.value = p; loadData() } }
-function doHomework(item) { alert(`开始做作业: ${item.name}`) }
+function doHomework(item) { toast.info(`开始做作业: ${item.name}`) }
 
 loadData()
 </script>

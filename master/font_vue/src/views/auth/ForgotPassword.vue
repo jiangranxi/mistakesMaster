@@ -56,9 +56,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authApi } from '@/api/auth'
+import { useToast } from '@/composables/useToast'
 import StepItem from './StepItem.vue'
 
 const router = useRouter()
+const toast = useToast()
 const phone = ref('')
 const code = ref('')
 const codeText = ref('获取验证码')
@@ -81,7 +83,7 @@ async function handleSubmit() {
     await authApi.verifyUser({ phone: phone.value, code: code.value })
     router.push('/auth/forgot-verify')
   } catch (e) {
-    alert(e?.response?.data?.message || '验证失败')
+    toast.error(e?.response?.data?.message || '验证失败')
   }
 }
 </script>

@@ -33,24 +33,12 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-order sortable">
-                订单号 <i class="ri-arrow-up-down-line"></i>
-              </th>
-              <th class="col-name sortable">
-                名称 <i class="ri-arrow-up-down-line"></i>
-              </th>
-              <th class="col-type sortable">
-                资源类型 <i class="ri-arrow-up-down-line"></i>
-              </th>
-              <th class="col-price sortable">
-                价格 <i class="ri-arrow-up-down-line"></i>
-              </th>
-              <th class="col-status sortable">
-                交易状态 <i class="ri-arrow-up-down-line"></i>
-              </th>
-              <th class="col-time sortable">
-                时间 <i class="ri-arrow-up-down-line"></i>
-              </th>
+              <th class="col-order sortable" @click="toggleSort('orderNo')">订单号<span class="sort-arrows" :data-sort="sortKey==='orderNo'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-name sortable" @click="toggleSort('name')">名称<span class="sort-arrows" :data-sort="sortKey==='name'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-type sortable" @click="toggleSort('resourceType')">资源类型<span class="sort-arrows" :data-sort="sortKey==='resourceType'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-price sortable" @click="toggleSort('price')">价格<span class="sort-arrows" :data-sort="sortKey==='price'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-status sortable" @click="toggleSort('status')">交易状态<span class="sort-arrows" :data-sort="sortKey==='status'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-time sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortKey==='time'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>
@@ -106,6 +94,12 @@ const orderList = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
+const sortKey = ref('orderNo')
+const sortDir = ref('asc')
+function toggleSort(key) {
+  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
+  else { sortKey.value = key; sortDir.value = 'asc' }
+}
 
 const pageSizes = computed(() => {
   const sizes = []

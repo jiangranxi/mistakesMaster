@@ -14,3 +14,8 @@ node_modules/
 api.md
 CLAUDE.md
 .claudeignore
+
+# 后端文件
+.idea
+.venv
+.env.example

@@ -34,13 +34,16 @@
 <script setup>
 import { ref } from 'vue'
 import { memberApi } from '@/api/member'
+import { useToast } from '@/composables/useToast'
+
+const toast = useToast()
 const oldPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 async function handleChange() {
   if (!oldPassword.value || !newPassword.value) return
-  if (newPassword.value !== confirmPassword.value) { alert('两次密码不一致'); return }
-  try { await memberApi.changePassword({ oldPassword: oldPassword.value, newPassword: newPassword.value }); alert('修改成功') } catch { alert('修改失败') }
+  if (newPassword.value !== confirmPassword.value) { toast.error('两次密码不一致'); return }
+  try { await memberApi.changePassword({ oldPassword: oldPassword.value, newPassword: newPassword.value }); toast.success('修改成功') } catch { toast.error('修改失败') }
 }
 </script>
 

@@ -2,7 +2,8 @@
   <div class="dropdown-container" ref="container">
     <div class="trigger" :class="{ active: open }" @click="open = !open">
       <div class="avatar"><i class="ri-user-3-fill"></i></div>
-      <span class="username">{{ authStore.userName }}</span>
+      <span class="username">{{ displayName }}</span>
+      <span class="username role-suffix">{{ roleLabel }}</span>
       <i class="ri-arrow-down-s-line arrow-icon"></i>
     </div>
 
@@ -24,19 +25,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const toast = useToast()
 const open = ref(false)
 
 const role = authStore.userRole
+const roleLabel = computed(() => role === 'teacher' ? '老师' : (role === 'student' ? '同学' : ''))
+// 去掉 name 中可能包含的角色后缀，避免重复显示
+const displayName = computed(() => {
+  const name = authStore.userName || ''
+  return name.replace(/\s*(老师|同学|学生)$/, '')
+})
 const memberPath = role === 'teacher' ? '/teacher/member' : '/student/member'
 
 function goMember() { open.value = false; router.push(memberPath) }
-function showHelp() { open.value = false; alert('帮助中心：请联系客服 400-xxx-xxxx') }
+function showHelp() { open.value = false; toast.info('帮助中心：请联系客服 400-xxx-xxxx') }
 function handleLogout() { open.value = false; authStore.logout(); router.push('/auth/login') }
 
 function onClickOutside(e) {
@@ -57,6 +66,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .avatar { width: 32px; height: 32px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .avatar i { font-size: 20px; color: #006644; }
 .username { font-size: 16px; color: #fff; }
+.role-suffix { margin-left: 6px; }
 .arrow-icon { font-size: 16px; color: #fff; }
 
 .dropdown-menu {

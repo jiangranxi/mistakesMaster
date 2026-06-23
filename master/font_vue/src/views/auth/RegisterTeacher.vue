@@ -108,8 +108,10 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { authApi } from '@/api/auth'
+import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
+const toast = useToast()
 
 const jobOptions = ['老师', '年级组长', '年级大组长', '校长']
 const subjectOptions = ['数学', '语文', '英语', '物理', '化学', '生物', '地理', '历史', '政治', '道德与法治']
@@ -154,7 +156,8 @@ async function sendCode() {
   if (!phone.value || codeSending.value) return
   codeSending.value = true
   try {
-    await authApi.sendRegisterCode(phone.value)
+    const res = await authApi.sendRegisterCode(phone.value)
+    if (res?.message) toast.info(res.message)
     let count = 60
     codeText.value = `${count}s`
     const timer = setInterval(() => {
@@ -183,10 +186,11 @@ async function handleRegister() {
       phone: phone.value,
       code: code.value
     })
-    alert('注册成功，请登录')
+    toast.success('注册成功，请登录')
+    await new Promise(r => setTimeout(r, 600))
     router.push('/auth/login')
   } catch (e) {
-    alert(e?.response?.data?.message || '注册失败')
+    toast.error(e?.response?.data?.message || '注册失败')
   }
 }
 </script>

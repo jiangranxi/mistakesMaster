@@ -40,7 +40,7 @@ import UserDropdown from '@/components/UserDropdown.vue'
 const router = useRouter()
 const route = useRoute()
 
-const currentNav = ref('classes')
+const currentNav = ref('lessonPlans')
 
 const navItems = [
   { key: 'lessonPlans', label: '我的教案', hasSub: true, path: '/teacher/lesson-plans/cloud' },

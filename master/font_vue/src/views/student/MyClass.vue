@@ -42,6 +42,9 @@
 <script setup>
 import { ref } from 'vue'
 import { classApi } from '@/api/class'
+import { useToast } from '@/composables/useToast'
+
+const toast = useToast()
 
 const classList = ref([])
 const showJoinDialog = ref(false)
@@ -54,7 +57,7 @@ async function loadData() {
 async function handleJoin() {
   if (!joinCode.value) return
   try { await classApi.joinClass(joinCode.value, joinMsg.value); showJoinDialog.value = false; loadData() }
-  catch (e) { alert(e?.response?.data?.message || '加入失败') }
+  catch (e) { toast.error(e?.response?.data?.message || '加入失败') }
 }
 loadData()
 </script>

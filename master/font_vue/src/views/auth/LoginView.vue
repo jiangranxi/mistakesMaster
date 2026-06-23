@@ -48,14 +48,6 @@
 
       <div class="spacer-24"></div>
 
-      <!-- 模拟快捷入口（开发调试用） -->
-      <div class="demo-btns">
-        <button class="btn-demo teacher" @click="mockGo('teacher')">👨‍🏫 进入教师端</button>
-        <button class="btn-demo student" @click="mockGo('student')">👩‍🎓 进入学生端</button>
-      </div>
-
-      <div class="spacer-24"></div>
-
       <!-- 底部链接 -->
       <div class="bottom-links">
         <router-link to="/auth/register-teacher" class="link">用户注册</router-link>
@@ -70,9 +62,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useToast } from '@/composables/useToast'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const toast = useToast()
 
 const phone = ref('')
 const password = ref('')
@@ -81,20 +75,18 @@ async function handleLogin() {
   if (!phone.value || !password.value) return
   try {
     const userInfo = await authStore.login(phone.value, password.value)
+    toast.success('登录成功')
+    await new Promise(r => setTimeout(r, 400))
     if (userInfo.role === 'teacher') {
       router.push('/teacher')
     } else {
       router.push('/student')
     }
   } catch (e) {
-    alert(e?.response?.data?.message || '登录失败')
+    toast.error(e?.response?.data?.message || '登录失败')
   }
 }
 
-function mockGo(role) {
-  authStore.mockLogin(role)
-  router.push(role === 'teacher' ? '/teacher' : '/student')
-}
 </script>
 
 <style scoped>
@@ -223,35 +215,4 @@ function mockGo(role) {
   cursor: pointer;
 }
 
-.demo-btns {
-  display: flex;
-  gap: 12px;
-}
-
-.btn-demo {
-  flex: 1;
-  height: 44px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif;
-  cursor: pointer;
-  color: #fff;
-}
-
-.btn-demo.teacher {
-  background: #006644;
-}
-
-.btn-demo.teacher:hover {
-  background: #005538;
-}
-
-.btn-demo.student {
-  background: #F97316;
-}
-
-.btn-demo.student:hover {
-  background: #EA580C;
-}
 </style>

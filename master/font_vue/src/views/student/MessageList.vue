@@ -6,10 +6,10 @@
       <thead>
         <tr>
           <th style="width:80px">序号</th>
-          <th style="width:120px" class="sortable">来自 <i class="ri-arrow-up-down-line"></i></th>
-          <th style="width:120px" class="sortable">身份 <i class="ri-arrow-up-down-line"></i></th>
-          <th class="sortable">消息内容 <i class="ri-arrow-up-down-line"></i></th>
-          <th style="width:160px" class="sortable">时间 <i class="ri-arrow-up-down-line"></i></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('from')">来自<span class="sort-arrows" :data-sort="sortKey==='from'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('role')">身份<span class="sort-arrows" :data-sort="sortKey==='role'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th class="sortable" @click="toggleSort('content')">消息内容<span class="sort-arrows" :data-sort="sortKey==='content'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:160px" class="sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortKey==='time'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
           <th style="width:100px">状态</th>
           <th style="width:100px">操作</th>
         </tr>
@@ -37,6 +37,12 @@
 import { ref } from 'vue'
 import { messageApi } from '@/api/message'
 const list = ref([])
+const sortKey = ref('from')
+const sortDir = ref('asc')
+function toggleSort(key) {
+  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
+  else { sortKey.value = key; sortDir.value = 'asc' }
+}
 async function loadData() { try { const res = await messageApi.getMessages(); list.value = res.list || [] } catch {} }
 async function markRead(item) { try { await messageApi.markRead(item.id); item.read = true } catch {} }
 loadData()

@@ -45,13 +45,30 @@
         <div class="form-field">
           <label class="field-label">地区</label>
           <div class="region-row">
-            <select class="field-input region-select" v-model="profile.province"><option value="">请选择省(市)</option></select>
+            <select class="field-input region-select" v-model="profile.province">
+              <option value="">请选择省(市)</option>
+              <option v-for="p in regionTree" :key="p.n" :value="p.n">{{ p.n }}</option>
+            </select>
             <span class="spacer-12"></span>
-            <select class="field-input region-select" v-model="profile.city"><option value="">请选择市县</option></select>
+            <select class="field-input region-select" v-model="profile.city" :disabled="!profile.province">
+              <option value="">请选择市县</option>
+              <option v-for="c in cities" :key="c.n" :value="c.n">{{ c.n }}</option>
+            </select>
             <span class="spacer-12"></span>
-            <select class="field-input region-select" v-model="profile.district"><option value="">请选择区</option></select>
+            <select class="field-input region-select" v-model="profile.district" :disabled="!profile.city">
+              <option value="">请选择区</option>
+              <option v-for="d in districts" :key="d" :value="d">{{ d }}</option>
+            </select>
           </div>
         </div>
+        <!-- <div class="spacer-16"></div>
+        <div class="form-field">
+          <label class="field-label">学科</label>
+          <select class="field-input" v-model="profile.subject">
+            <option value="">请选择学科</option>
+            <option v-for="s in allSubjects" :key="s" :value="s">{{ s }}</option>
+          </select>
+        </div> -->
         <div class="spacer-24"></div>
         <button class="btn-save" @click="handleSave">保存</button>
       </div>
@@ -60,12 +77,32 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed, watch } from 'vue'
 import { memberApi } from '@/api/member'
+import { useToast } from '@/composables/useToast'
+import { regionTree } from '@/data/regions'
 import DatePicker from '@/components/DatePicker.vue'
-const profile = reactive({ accountId: '', realName: '', birthday: '', gender: '男', email: '', phone: '', province: '', city: '', district: '' })
+
+const toast = useToast()
+const profile = reactive({ accountId: '', realName: '', birthday: '', gender: '男', email: '', phone: '', province: '', city: '', district: '', subject: '' })
+
+// 地区联动
+const cities = computed(() => {
+  if (!profile.province) return []
+  const p = regionTree.find(r => r.n === profile.province)
+  return p ? p.c : []
+})
+const districts = computed(() => {
+  if (!profile.city) return []
+  const c = cities.value.find(c => c.n === profile.city)
+  return c ? c.d : []
+})
+watch(() => profile.province, () => { profile.city = ''; profile.district = '' })
+watch(() => profile.city, () => { profile.district = '' })
+
+const allSubjects = ['数学', '语文', '英语', '物理', '化学', '生物', '地理', '历史', '政治', '道德与法治']
 async function loadProfile() { try { Object.assign(profile, await memberApi.getProfile()) } catch {} }
-async function handleSave() { try { await memberApi.updateProfile(profile); alert('保存成功') } catch { alert('保存失败') } }
+async function handleSave() { try { await memberApi.updateProfile(profile); toast.success('保存成功') } catch { toast.error('保存失败') } }
 loadProfile()
 </script>
 
@@ -83,9 +120,10 @@ loadProfile()
 .field-input { flex: 1; height: 36px; padding: 0 12px; border: 0.8px solid #E5E7EB; border-radius: 4px; font-size: 14px; outline: none; color: #333; }
 .field-input::placeholder { color: #999; }
 .field-value { flex: 1; height: 36px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; color: #333; }
-.field-value.readonly { background: #F3F4F6; border-radius: 4px; }
+.field-value.readonly { background: #F3F4F6; border-radius: 4px; cursor: not-allowed; }
 .region-row { flex: 1; display: flex; }
 .region-select { width: 150px; flex: none; }
+.region-select:disabled { cursor: not-allowed; }
 .spacer-12 { width: 12px; flex-shrink: 0; }
 .spacer-16 { height: 16px; }
 .spacer-24 { height: 24px; }

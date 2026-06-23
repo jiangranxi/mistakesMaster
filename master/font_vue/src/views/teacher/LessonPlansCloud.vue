@@ -29,17 +29,14 @@
             <thead>
               <tr>
                 <th class="col-index">序号</th>
-                <th class="col-name sortable">
-                  课件名称
-                  <i class="ri-arrow-down-s-line sort-icon"></i>
+                <th class="col-name sortable" @click="toggleSort('name')">
+                  课件名称<span class="sort-arrows" :data-sort="sortField==='name'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
-                <th class="col-size sortable">
-                  文件大小
-                  <i class="ri-arrow-down-s-line sort-icon"></i>
+                <th class="col-size sortable" @click="toggleSort('size')">
+                  文件大小<span class="sort-arrows" :data-sort="sortField==='size'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
-                <th class="col-time sortable">
-                  创建时间
-                  <i class="ri-arrow-down-s-line sort-icon"></i>
+                <th class="col-time sortable" @click="toggleSort('time')">
+                  创建时间<span class="sort-arrows" :data-sort="sortField==='time'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
                 <th class="col-action">操作</th>
               </tr>
@@ -73,8 +70,13 @@ import { lessonPlanApi } from '@/api/lessonPlan'
 
 const tableData = ref([])
 const pagination = ref({ page: 1, pageSize: 15, total: 0 })
-const sortField = ref('')
-const sortOrder = ref('')
+const sortField = ref('name')
+const sortOrder = ref('asc')
+function toggleSort(key) {
+  if (sortField.value === key) { sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc' }
+  else { sortField.value = key; sortOrder.value = 'asc' }
+  fetchData()
+}
 
 async function fetchData() {
   try {

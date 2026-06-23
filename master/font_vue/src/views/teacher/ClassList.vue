@@ -94,6 +94,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { classApi } from '@/api/class'
+import { useToast } from '@/composables/useToast'
+
+const toast = useToast()
 
 const createdClasses = ref([])
 const joinedClasses = ref([])
@@ -114,7 +117,7 @@ async function handleCreate() {
     await classApi.createClass(createForm)
     showCreateDialog.value = false
     loadData()
-  } catch (e) { alert(e?.response?.data?.message || '创建失败') }
+  } catch (e) { toast.error(e?.response?.data?.message || '创建失败') }
 }
 
 async function handleJoin() {
@@ -123,7 +126,7 @@ async function handleJoin() {
     await classApi.joinClass(joinCode.value, joinMsg.value)
     showJoinDialog.value = false
     loadData()
-  } catch (e) { alert(e?.response?.data?.message || '加入失败') }
+  } catch (e) { toast.error(e?.response?.data?.message || '加入失败') }
 }
 
 loadData()

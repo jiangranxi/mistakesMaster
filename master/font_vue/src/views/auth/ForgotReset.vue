@@ -48,19 +48,21 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authApi } from '@/api/auth'
+import { useToast } from '@/composables/useToast'
 import StepItem from './StepItem.vue'
 
 const router = useRouter()
+const toast = useToast()
 const password = ref('')
 const confirmPassword = ref('')
 
 async function handleReset() {
   if (!password.value) return
-  if (password.value !== confirmPassword.value) { alert('两次密码不一致'); return }
+  if (password.value !== confirmPassword.value) { toast.error('两次密码不一致'); return }
   try {
     await authApi.resetPassword({ password: password.value })
     router.push('/auth/forgot-success')
-  } catch (e) { alert(e?.response?.data?.message || '修改失败') }
+  } catch (e) { toast.error(e?.response?.data?.message || '修改失败') }
 }
 </script>
 
