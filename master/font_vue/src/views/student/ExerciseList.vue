@@ -39,7 +39,7 @@
           <span class="close-btn" @click="detailVisible = false"><i class="ri-close-line"></i></span>
           <div class="header-info">
             <h2 class="book-title">《{{ currentBook?.name }}》</h2>
-            <div class="book-version">{{ currentBook?.publisher }}</div>
+            <div class="book-version">出版社：{{ currentBook?.publisher }}</div>
             <div class="book-meta">
               <span v-if="currentBook?.updateTime">更新时间: {{ currentBook.updateTime }}</span>
               <span v-if="currentBook?.version">教材版本: {{ currentBook.version }}</span>
@@ -154,7 +154,7 @@ onMounted(() => loadData())
 .header-info { color: #fff; }
 .book-title { font-size: 20px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; margin-bottom: 8px; }
 .book-version { font-size: 16px; margin-bottom: 8px; }
-.book-meta { font-size: 16px; display: flex; flex-wrap: wrap; gap: 8px 24px; margin-bottom: 16px; }
+.book-meta { font-size: 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .buy-btn { width: 120px; height: 40px; background: #FF0000; color: #fff; border: none; border-radius: 4px; font-size: 16px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; cursor: pointer; }
 .detail-body { padding: 0 80px; margin-top: -10px; }
 .detail-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.1); padding: 32px; min-height: 600px; }

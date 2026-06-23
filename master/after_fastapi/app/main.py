@@ -1,14 +1,16 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.core.exceptions import AppException
 from app.database import engine
 from app.models import Base
-from app.routers import auth, books, member, messages
+from app.routers import auth, books, member, messages, upload
 from app.routers.teacher import classes, homework as t_homework, lesson_plans, review
 from app.routers.student import classes as s_classes, homework as s_homework
 
@@ -19,6 +21,8 @@ async def lifespan(app: FastAPI):
     # 开发阶段自动建表，生产环境应使用 Alembic 迁移
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    # 确保上传目录存在
+    Path(settings.UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
     yield
 
 
@@ -53,6 +57,10 @@ app.include_router(s_homework.router, prefix="/student")
 app.include_router(books.router)
 app.include_router(member.router)
 app.include_router(messages.router)
+app.include_router(upload.router)
+
+# 挂载静态文件（必须在路由注册之后）
+app.mount("/static", StaticFiles(directory=settings.UPLOAD_DIR), name="static")
 
 
 # 全局异常处理

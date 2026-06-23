@@ -1,0 +1,1 @@
+import{z as r}from"./index-CBC9ybZh.js";const o={getProfile:()=>r.get("/member/profile"),updateProfile:e=>r.put("/member/profile",e),changePassword:e=>r.put("/member/password",e),getOrders:e=>r.get("/member/orders",{params:e})};export{o as m};

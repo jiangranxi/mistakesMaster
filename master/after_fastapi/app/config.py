@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     # Redis（可选）
     REDIS_URL: str = ""
 
+    # 文件上传
+    UPLOAD_DIR: str = "uploads"
+    MAX_UPLOAD_SIZE: int = 5 * 1024 * 1024  # 5MB
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 

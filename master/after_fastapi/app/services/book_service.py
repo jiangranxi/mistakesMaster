@@ -35,6 +35,13 @@ class BookService:
             "pageSize": page_size,
         }
 
+    async def update_book(self, book_id: uuid.UUID, data: dict) -> dict:
+        book = await self.book_repo.get_by_id(book_id)
+        if not book:
+            raise NotFound("习题集不存在")
+        await self.book_repo.update(book, **data)
+        return {"id": str(book.id), "cover": book.cover, "message": "更新成功"}
+
     async def get_detail(self, book_id: uuid.UUID) -> dict:
         book = await self.book_repo.get_with_chapters(book_id)
         if not book:
