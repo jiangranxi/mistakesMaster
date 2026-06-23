@@ -30,13 +30,13 @@
               <tr>
                 <th class="col-index">序号</th>
                 <th class="col-name sortable" @click="toggleSort('name')">
-                  课件名称<span class="sort-arrows" :data-sort="sortField==='name'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
+                  课件名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
                 <th class="col-size sortable" @click="toggleSort('size')">
-                  文件大小<span class="sort-arrows" :data-sort="sortField==='size'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
+                  文件大小<span class="sort-arrows" :data-sort="sortState['size']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
                 <th class="col-time sortable" @click="toggleSort('time')">
-                  创建时间<span class="sort-arrows" :data-sort="sortField==='time'?sortOrder:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
+                  创建时间<span class="sort-arrows" :data-sort="sortState['time']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
                 <th class="col-action">操作</th>
               </tr>
@@ -65,26 +65,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { lessonPlanApi } from '@/api/lessonPlan'
 
 const tableData = ref([])
 const pagination = ref({ page: 1, pageSize: 15, total: 0 })
-const sortField = ref('name')
-const sortOrder = ref('asc')
-function toggleSort(key) {
-  if (sortField.value === key) { sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc' }
-  else { sortField.value = key; sortOrder.value = 'asc' }
-  fetchData()
-}
+const sortState = reactive({ name: 'asc', size: 'asc', time: 'asc' })
+function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc'; fetchData() }
 
 async function fetchData() {
   try {
     const res = await lessonPlanApi.getCloudPlans({
       page: pagination.value.page,
       pageSize: pagination.value.pageSize,
-      sortField: sortField.value,
-      sortOrder: sortOrder.value
+      sortState
     })
     if (res?.data) {
       tableData.value = res.data.list || res.data

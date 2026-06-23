@@ -6,10 +6,10 @@
       <thead>
         <tr>
           <th style="width:80px">序号</th>
-          <th style="width:120px" class="sortable" @click="toggleSort('from')">来自<span class="sort-arrows" :data-sort="sortKey==='from'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th style="width:120px" class="sortable" @click="toggleSort('role')">身份<span class="sort-arrows" :data-sort="sortKey==='role'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th class="sortable" @click="toggleSort('content')">消息内容<span class="sort-arrows" :data-sort="sortKey==='content'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th style="width:160px" class="sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortKey==='time'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('from')">来自<span class="sort-arrows" :data-sort="sortState['from']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('role')">身份<span class="sort-arrows" :data-sort="sortState['role']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th class="sortable" @click="toggleSort('content')">消息内容<span class="sort-arrows" :data-sort="sortState['content']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:160px" class="sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortState['time']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
           <th style="width:100px">状态</th>
           <th style="width:100px">操作</th>
         </tr>
@@ -38,13 +38,9 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-const sortKey = ref('from')
-const sortDir = ref('asc')
-function toggleSort(key) {
-  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
-  else { sortKey.value = key; sortDir.value = 'asc' }
-}
+import { ref, reactive } from 'vue'
+const sortState = reactive({ from: 'asc', role: 'asc', content: 'asc', time: 'asc' })
+function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
 </script>
 
 <style scoped>

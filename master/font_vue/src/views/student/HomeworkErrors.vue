@@ -33,11 +33,11 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-name sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortKey==='name'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-source sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortKey==='source'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortKey==='subject'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-time sortable" @click="toggleSort('submitTime')">提交时间<span class="sort-arrows" :data-sort="sortKey==='submitTime'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-error sortable" @click="toggleSort('errorNo')">错题序号<span class="sort-arrows" :data-sort="sortKey==='errorNo'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-name sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-source sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortState['source']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-time sortable" @click="toggleSort('submitTime')">提交时间<span class="sort-arrows" :data-sort="sortState['submitTime']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-error sortable" @click="toggleSort('errorNo')">错题序号<span class="sort-arrows" :data-sort="sortState['errorNo']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>
@@ -83,12 +83,8 @@ const list = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
-const sortKey = ref('name')
-const sortDir = ref('asc')
-function toggleSort(key) {
-  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
-  else { sortKey.value = key; sortDir.value = 'asc' }
-}
+const sortState = reactive({ name: 'asc', source: 'asc', subject: 'asc', submitTime: 'asc', errorNo: 'asc' })
+function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
 const filters = reactive({ name: '', book: '', startTime: '', endTime: '' })
 
 const pageSizes = computed(() => {

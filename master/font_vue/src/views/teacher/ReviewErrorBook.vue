@@ -45,14 +45,14 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-date sortable" @click="toggleSort('date')">日期<span class="sort-arrows" :data-sort="sortKey==='date'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-report sortable" @click="toggleSort('report')">讲评报告<span class="sort-arrows" :data-sort="sortKey==='report'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-book sortable" @click="toggleSort('book')">书目名称<span class="sort-arrows" :data-sort="sortKey==='book'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('max')">最高分<span class="sort-arrows" :data-sort="sortKey==='max'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('min')">最低分<span class="sort-arrows" :data-sort="sortKey==='min'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('avg')">平均数<span class="sort-arrows" :data-sort="sortKey==='avg'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('median')">中位数<span class="sort-arrows" :data-sort="sortKey==='median'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-mode sortable" @click="toggleSort('mode')">众数<span class="sort-arrows" :data-sort="sortKey==='mode'?sortDir:''"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-date sortable" @click="toggleSort('date')">日期<span class="sort-arrows" :data-sort="sortState['date']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-report sortable" @click="toggleSort('report')">讲评报告<span class="sort-arrows" :data-sort="sortState['report']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-book sortable" @click="toggleSort('book')">书目名称<span class="sort-arrows" :data-sort="sortState['book']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('max')">最高分<span class="sort-arrows" :data-sort="sortState['max']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('min')">最低分<span class="sort-arrows" :data-sort="sortState['min']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('avg')">平均数<span class="sort-arrows" :data-sort="sortState['avg']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('median')">中位数<span class="sort-arrows" :data-sort="sortState['median']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-mode sortable" @click="toggleSort('mode')">众数<span class="sort-arrows" :data-sort="sortState['mode']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>
@@ -109,12 +109,8 @@ const filters = reactive({
 const subjects = ref([])
 const classes = ref([])
 const tableData = ref([])
-const sortKey = ref('date')
-const sortDir = ref('asc')
-function toggleSort(key) {
-  if (sortKey.value === key) { sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc' }
-  else { sortKey.value = key; sortDir.value = 'asc' }
-}
+const sortState = reactive({ date: 'asc', report: 'asc', book: 'asc', max: 'asc', min: 'asc', avg: 'asc', median: 'asc', mode: 'asc' })
+function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
 </script>
 
 <style scoped>
