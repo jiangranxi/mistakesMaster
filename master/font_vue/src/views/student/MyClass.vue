@@ -52,11 +52,11 @@ const joinCode = ref('')
 const joinMsg = ref('')
 
 async function loadData() {
-  try { classList.value = await classApi.getJoinedClasses() } catch {}
+  try { classList.value = await classApi.getStudentJoined() } catch {}
 }
 async function handleJoin() {
   if (!joinCode.value) return
-  try { await classApi.joinClass(joinCode.value, joinMsg.value); showJoinDialog.value = false; loadData() }
+  try { await classApi.studentJoin(joinCode.value, joinMsg.value); showJoinDialog.value = false; loadData() }
   catch (e) { toast.error(e?.response?.data?.message || '加入失败') }
 }
 loadData()
@@ -64,7 +64,7 @@ loadData()
 
 <style scoped>
 .class-page { min-height: 100%; }
-.content-padded { padding: 32px 64px; }
+.content-padded { padding: 32px 100px; }
 .page-title { font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #333; }
 .spacer-16 { height: 16px; }
 .spacer-32 { height: 32px; }

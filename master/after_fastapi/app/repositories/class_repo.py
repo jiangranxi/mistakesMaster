@@ -33,6 +33,7 @@ class ClassRepository(BaseRepository[Class]):
         """教师作为成员加入的班级"""
         stmt = (
             select(Class)
+            .options(selectinload(Class.teacher))
             .join(ClassStudent, ClassStudent.class_id == Class.id)
             .where(ClassStudent.student_id == teacher_id)
         )

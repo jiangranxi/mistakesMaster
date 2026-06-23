@@ -102,9 +102,9 @@ async function loadData() {
       pageSize: pageSize.value,
       status: activeTab.value
     })
-    if (res?.data) {
-      orderList.value = res.data.list || []
-      totalPages.value = Math.ceil((res.data.total || 0) / pageSize.value) || 0
+    if (res) {
+      orderList.value = res.list || []
+      totalPages.value = Math.ceil((res.total || 0) / pageSize.value) || 0
     }
   } catch {}
 }

@@ -6,10 +6,6 @@
         <h3 class="section-title">我创建的班级</h3>
         <div class="spacer-16"></div>
         <div class="card-grid">
-          <div class="add-card" @click="showCreateDialog = true">
-            <i class="ri-add-circle-line add-icon"></i>
-            <span class="add-text">创建新班级</span>
-          </div>
           <div
             v-for="cls in createdClasses"
             :key="cls.id"
@@ -18,6 +14,10 @@
             <h4>{{ cls.name }}</h4>
             <p>{{ cls.studentCount || 0 }} 名学生</p>
             <p class="code">班级码: {{ cls.code }}</p>
+          </div>
+          <div class="add-card" @click="showCreateDialog = true">
+            <i class="ri-add-circle-line add-icon"></i>
+            <span class="add-text">创建新班级</span>
           </div>
         </div>
       </section>
@@ -29,10 +29,6 @@
         <h3 class="section-title">我加入的班级</h3>
         <div class="spacer-16"></div>
         <div class="card-grid">
-          <div class="add-card" @click="showJoinDialog = true">
-            <i class="ri-add-circle-line add-icon"></i>
-            <span class="add-text">加入新班级</span>
-          </div>
           <div
             v-for="cls in joinedClasses"
             :key="cls.id"
@@ -40,6 +36,10 @@
           >
             <h4>{{ cls.name }}</h4>
             <p>{{ cls.teacherName }} · {{ cls.studentCount || 0 }} 名学生</p>
+          </div>
+          <div class="add-card" @click="showJoinDialog = true">
+            <i class="ri-add-circle-line add-icon"></i>
+            <span class="add-text">加入新班级</span>
           </div>
         </div>
       </section>

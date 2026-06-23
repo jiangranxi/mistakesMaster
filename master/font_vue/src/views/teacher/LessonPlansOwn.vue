@@ -89,9 +89,9 @@ async function fetchData() {
       pageSize: pagination.value.pageSize,
       sortState
     })
-    if (res?.data) {
-      tableData.value = res.data.list || res.data
-      pagination.value.total = res.data.total || 0
+    if (res) {
+      tableData.value = res.list || res
+      pagination.value.total = res.total || 0
     }
   } catch {
     // 接口未实现时展示空状态

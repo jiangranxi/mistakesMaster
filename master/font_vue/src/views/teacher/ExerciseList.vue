@@ -90,9 +90,9 @@ function goPage(p) {
 async function loadData() {
   try {
     const res = await exerciseApi.getBookList({ page: pagination.value.page, pageSize: pagination.value.pageSize })
-    if (res?.data) {
-      list.value = res.data.list || []
-      pagination.value.total = res.data.total || 0
+    if (res) {
+      list.value = res.list || []
+      pagination.value.total = res.total || 0
     }
   } catch {}
 }

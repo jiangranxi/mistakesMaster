@@ -91,9 +91,9 @@ async function loadData() {
       page: page.value, pageSize: pageSize.value,
       ...filters
     })
-    if (res?.data) {
-      list.value = res.data.list || []
-      totalPages.value = Math.ceil((res.data.total || 0) / pageSize.value) || 0
+    if (res) {
+      list.value = res.list || []
+      totalPages.value = Math.ceil((res.total || 0) / pageSize.value) || 0
     }
   } catch {}
 }

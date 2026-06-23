@@ -10,7 +10,7 @@ from app.database import engine
 from app.models import Base
 from app.routers import auth, books, member, messages
 from app.routers.teacher import classes, homework as t_homework, lesson_plans, review
-from app.routers.student import homework as s_homework
+from app.routers.student import classes as s_classes, homework as s_homework
 
 
 @asynccontextmanager
@@ -46,6 +46,7 @@ app.include_router(lesson_plans.router, prefix="/teacher")
 app.include_router(review.router, prefix="/teacher")
 
 # 学生端
+app.include_router(s_classes.router, prefix="/student")
 app.include_router(s_homework.router, prefix="/student")
 
 # 通用模块
