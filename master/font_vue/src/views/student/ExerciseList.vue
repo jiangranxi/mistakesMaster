@@ -39,7 +39,7 @@
           <span class="close-btn" @click="detailVisible = false"><i class="ri-close-line"></i></span>
           <div class="header-info">
             <h2 class="book-title">《{{ currentBook?.name }}》</h2>
-            <div class="book-version">出版社：{{ currentBook?.publisher }}</div>
+            <div class="book-version">教材版本：{{ currentBook?.publisher }}</div>
             <div class="book-meta">
               <span v-if="currentBook?.updateTime">更新时间: {{ currentBook.updateTime }}</span>
               <span v-if="currentBook?.version">教材版本: {{ currentBook.version }}</span>
