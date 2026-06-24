@@ -162,6 +162,7 @@ async function sendCode() {
       }
     }, 1000)
   } catch {
+    toast.error('发送失败，请稍后重试')
     codeText.value = '获取验证码'
     codeSending.value = false
   }
