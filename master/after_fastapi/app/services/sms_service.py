@@ -3,6 +3,7 @@ import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.exceptions import TooManyRequests
 from app.models.sms_code import SmsCode
 from app.repositories.sms_code_repo import SmsCodeRepository
 
@@ -15,13 +16,19 @@ class SmsService:
     def __init__(self, db: AsyncSession):
         self.sms_repo = SmsCodeRepository(db)
 
-    async def send_code(self, phone: str, code_type: str) -> str:
+    async def send_code(self, phone: str, code_type: str, device_id: str | None = None) -> str:
         """
         生成并"发送"验证码。
         开发阶段：生成 6 位随机码，日志输出，存入数据库。
+        限制每个设备每天最多 20 条。
         """
+        if device_id:
+            count = await self.sms_repo.count_device_today(device_id)
+            if count >= 20:
+                raise TooManyRequests("该设备今日发送验证码已达上限")
+
         code = str(random.randint(100000, 999999))
-        await self.sms_repo.create_code(phone, code, code_type)
+        await self.sms_repo.create_code(phone, code, code_type, device_id=device_id)
         logger.info(f"[SMS Mock] 验证码已发送到 {phone}: {code} (类型: {code_type})")
         return code
 

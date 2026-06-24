@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from sqlalchemy import select, update
+from sqlalchemy import select, update, func, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.sms_code import SmsCode
@@ -13,17 +13,34 @@ TZ = timezone(timedelta(hours=8))
 class SmsCodeRepository(BaseRepository[SmsCode]):
     model = SmsCode
 
-    async def create_code(self, phone: str, code: str, code_type: str, ttl_minutes: int = 5) -> SmsCode:
+    async def create_code(
+        self, phone: str, code: str, code_type: str,
+        device_id: str | None = None, ttl_minutes: int = 5,
+    ) -> SmsCode:
         sms = SmsCode(
             id=uuid.uuid4(),
             phone=phone,
             code=code,
             type=code_type,
+            device_id=device_id,
             expires_at=datetime.now(TZ) + timedelta(minutes=ttl_minutes),
         )
         self.db.add(sms)
         await self.db.flush()
         return sms
+
+    async def count_device_today(self, device_id: str) -> int:
+        """统计指定设备今天已发送的验证码数量"""
+        stmt = (
+            select(func.count())
+            .select_from(SmsCode)
+            .where(
+                SmsCode.device_id == device_id,
+                text("created_at >= CURDATE()"),
+            )
+        )
+        result = await self.db.execute(stmt)
+        return result.scalar() or 0
 
     async def get_valid_code(self, phone: str, code: str, code_type: str) -> SmsCode | None:
         stmt = (

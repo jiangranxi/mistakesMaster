@@ -1,3 +1,0 @@
-解决无法同步问题
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/known_hosts

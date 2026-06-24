@@ -36,3 +36,9 @@ class Conflict(AppException):
     """409 - 资源冲突（如手机号已注册）"""
     def __init__(self, message: str = "资源已存在"):
         super().__init__(status_code=409, message=message)
+
+
+class TooManyRequests(AppException):
+    """429 - 请求过于频繁"""
+    def __init__(self, message: str = "请求过于频繁，请稍后再试"):
+        super().__init__(status_code=429, message=message)

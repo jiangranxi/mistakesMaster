@@ -1,4 +1,5 @@
 import request from './request'
+import { getDeviceId } from '@/utils/device'
 
 export const authApi = {
   // 登录 - 学生和教师共用同一入口，通过手机号区分
@@ -11,10 +12,10 @@ export const authApi = {
   registerStudent: (data) => request.post('/auth/register/student', data),
 
   // 发送验证码(注册)
-  sendRegisterCode: (phone) => request.post('/auth/send-code', { phone, type: 'register' }),
+  sendRegisterCode: (phone) => request.post('/auth/send-code', { phone, type: 'register', deviceId: getDeviceId() }),
 
   // 忘记密码 - 发送验证码
-  sendForgotCode: (phone) => request.post('/auth/send-code', { phone, type: 'forgot' }),
+  sendForgotCode: (phone) => request.post('/auth/send-code', { phone, type: 'forgot', deviceId: getDeviceId() }),
 
   // 忘记密码 - 验证用户
   verifyUser: (data) => request.post('/auth/forgot/verify', data),

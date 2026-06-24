@@ -11,6 +11,7 @@ class LoginRequest(BaseModel):
 class SendCodeRequest(BaseModel):
     phone: str = Field(..., min_length=11, max_length=11, pattern=r"^\d{11}$")
     type: str = Field(..., pattern=r"^(register|forgot)$")
+    deviceId: str | None = Field(default=None, max_length=64, description="设备标识")
 
 
 class RegisterTeacherRequest(BaseModel):

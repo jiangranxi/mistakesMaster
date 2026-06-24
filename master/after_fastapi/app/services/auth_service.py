@@ -33,9 +33,9 @@ class AuthService:
         token = create_access_token({"sub": str(user.id), "role": user.role})
         return {"token": token, "userInfo": self._to_user_info(user)}
 
-    async def send_sms_code(self, phone: str, code_type: str) -> str:
+    async def send_sms_code(self, phone: str, code_type: str, device_id: str | None = None) -> str:
         """发送短信验证码"""
-        return await self.sms_service.send_code(phone, code_type)
+        return await self.sms_service.send_code(phone, code_type, device_id)
 
     async def register_teacher(self, data) -> User:
         """教师注册"""

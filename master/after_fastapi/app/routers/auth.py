@@ -28,7 +28,7 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
 async def send_code(req: SendCodeRequest, db: AsyncSession = Depends(get_db)):
     """发送短信验证码（注册/忘记密码）"""
     service = AuthService(db)
-    code = await service.send_sms_code(req.phone, req.type)
+    code = await service.send_sms_code(req.phone, req.type, req.deviceId)
     print(code)
     return {"message": f"验证码已发送: {code}"}
 
