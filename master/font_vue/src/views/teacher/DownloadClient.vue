@@ -4,7 +4,7 @@
     <div class="download-cards">
       <div class="download-card">
         <div class="card-logo">
-          <img src="@/assets/logo.svg" alt="ScienceWord" width="121" height="120" />
+          <img src="@/assets/logo.png" alt="ScienceWord" width="121" height="120" />
         </div>
         <div class="card-bottom">
           <span class="card-label">ScienceWord&Marking for Windows</span>
@@ -16,7 +16,7 @@
 
       <div class="download-card">
         <div class="card-logo">
-          <img src="@/assets/logo.svg" alt="Marking" width="121" height="120" />
+          <img src="@/assets/logo.png" alt="Marking" width="121" height="120" />
         </div>
         <div class="card-bottom">
           <span class="card-label">Marking for Android</span>

@@ -11,5 +11,8 @@ export const memberApi = {
   changePassword: (data) => request.put('/member/password', data),
 
   // 我的订单
-  getOrders: (params) => request.get('/member/orders', { params })
+  getOrders: (params) => request.get('/member/orders', { params }),
+
+  // 创建订单（购买习题集）
+  createOrder: (data) => request.post('/member/orders', data)
 }

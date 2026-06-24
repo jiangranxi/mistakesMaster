@@ -37,14 +37,14 @@
           <span class="close-btn" @click="detailVisible = false"><i class="ri-close-line"></i></span>
           <div class="header-info">
             <h2 class="book-title">《{{ currentBook?.name }}》</h2>
-            <div class="book-version">出版社：{{ currentBook?.publisher }}</div>
+            <div class="book-version">教材版本：{{ currentBook?.publisher }}</div>
             <div class="book-meta">
               <span v-if="currentBook?.updateTime">更新时间: {{ currentBook.updateTime }}</span>
               <span v-if="currentBook?.version">教材版本: {{ currentBook.version }}</span>
               <span v-if="currentBook?.subject">学 科: {{ currentBook.subject }}</span>
               <span v-if="currentBook?.gradeTerm">年级学期: {{ currentBook.gradeTerm }}</span>
             </div>
-            <button class="buy-btn">购买 ¥ {{ (currentBook?.price || 0).toFixed(2) }}</button>
+            <button class="buy-btn" @click.stop="goBuy(currentBook)">购买 ¥ {{ (currentBook?.price || 0).toFixed(2) }}</button>
           </div>
         </div>
         <div class="detail-body">
@@ -57,10 +57,7 @@
               <h3 class="section-title">目录:</h3>
               <p v-if="!currentBook?.chapters?.length" class="section-content">生产中</p>
               <div v-else class="chapter-list">
-                <div v-for="(ch, i) in currentBook.chapters" :key="i" class="chapter-item">
-                  <i class="ri-file-text-line"></i>
-                  <a href="#">{{ ch }}</a>
-                </div>
+                <ChapterTree :nodes="currentBook.chapters" />
               </div>
             </div>
           </div>
@@ -72,9 +69,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { exerciseApi } from '@/api/exercise'
 import PaginationBar from '@/components/PaginationBar.vue'
+import ChapterTree from '@/components/ChapterTree.vue'
 
+const router = useRouter()
 const list = ref([])
 const pagination = ref({ page: 1, pageSize: 15, total: 0 })
 const detailVisible = ref(false)
@@ -99,6 +99,12 @@ async function loadData() {
 function showDetail(item) {
   currentBook.value = item
   detailVisible.value = true
+}
+
+function goBuy(book) {
+  if (book?.id) {
+    router.push(`/teacher/exercises/buy/${book.id}`)
+  }
 }
 
 onMounted(() => loadData())
@@ -154,9 +160,6 @@ onMounted(() => loadData())
 .section-title { font-size: 18px; font-family: 'SourceHanSans-Medium', 'Noto Sans SC', sans-serif; color: #333; padding-bottom: 8px; }
 .section-content { font-size: 16px; color: #333; padding-top: 16px; }
 .chapter-list { padding-top: 16px; display: flex; flex-direction: column; gap: 8px; }
-.chapter-item { display: flex; align-items: center; gap: 8px; }
-.chapter-item i { font-size: 16px; color: #6B7280; }
-.chapter-item a { font-size: 16px; color: #2B7CD3; text-decoration: none; }
 
 .divider {
   border: none;           /* 去掉默认边框 */

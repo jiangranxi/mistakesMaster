@@ -1,8 +1,7 @@
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from sqlalchemy import String, Integer, Text, Numeric, ForeignKey
-from sqlalchemy import Uuid as UUID
+from sqlalchemy import String, Integer, Text, Numeric, ForeignKey, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, UUIDMixin
@@ -22,9 +21,7 @@ class Book(Base, UUIDMixin):
     version: Mapped[str | None] = mapped_column(String(64), nullable=True)
     grade_term: Mapped[str | None] = mapped_column(String(64), nullable=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    updated_at: Mapped[datetime] = mapped_column(
-        default=lambda: datetime.now(TZ), nullable=False
-    )
+    updated_at: Mapped[str | None] = mapped_column(String(32), nullable=False)
 
     chapters = relationship("BookChapter", back_populates="book", cascade="all, delete-orphan")
 
@@ -34,11 +31,11 @@ class BookChapter(Base, UUIDMixin):
     __tablename__ = "book_chapters"
 
     book_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), nullable=False
+        Uuid, ForeignKey("books.id", ondelete="CASCADE"), nullable=False
     )
     name: Mapped[str] = mapped_column(String(256), nullable=False)
     parent_id: Mapped[uuid.UUID | None] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("book_chapters.id"), nullable=True
+        Uuid, ForeignKey("book_chapters.id"), nullable=True
     )
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
