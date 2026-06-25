@@ -33,20 +33,20 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-order sortable" @click="toggleSort('orderNo')">订单号<span class="sort-arrows" :data-sort="sortState['orderNo']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-name sortable" @click="toggleSort('name')">名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-type sortable" @click="toggleSort('resourceType')">资源类型<span class="sort-arrows" :data-sort="sortState['resourceType']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-price sortable" @click="toggleSort('price')">价格<span class="sort-arrows" :data-sort="sortState['price']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-status sortable" @click="toggleSort('status')">交易状态<span class="sort-arrows" :data-sort="sortState['status']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-time sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortState['time']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-order sortable" @click="toggleSort('orderNo')">订单号<span class="sort-arrows" :data-sort="getSortState('orderNo')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-name sortable" @click="toggleSort('name')">名称<span class="sort-arrows" :data-sort="getSortState('name')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-type sortable" @click="toggleSort('resourceType')">资源类型<span class="sort-arrows" :data-sort="getSortState('resourceType')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-price sortable" @click="toggleSort('price')">价格<span class="sort-arrows" :data-sort="getSortState('price')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-status sortable" @click="toggleSort('status')">交易状态<span class="sort-arrows" :data-sort="getSortState('status')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-time sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="getSortState('time')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="!orderList.length" class="empty-row">
+            <tr v-if="!sortedData.length" class="empty-row">
               <td colspan="8">暂无数据</td>
             </tr>
-            <tr v-for="(item, idx) in orderList" :key="item.id || idx">
+            <tr v-for="(item, idx) in sortedData" :key="item.id || idx">
               <td>{{ idx + 1 }}</td>
               <td>{{ item.orderNo }}</td>
               <td>{{ item.name }}</td>
@@ -79,6 +79,7 @@
 import { ref, reactive } from 'vue'
 import { memberApi } from '@/api/member'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useTableSort } from '@/composables/useTableSort'
 
 const activeTab = ref('all')
 const orderTabs = [
@@ -92,8 +93,7 @@ const orderList = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
-const sortState = reactive({ orderNo: 'asc', name: 'asc', resourceType: 'asc', price: 'asc', status: 'asc', time: 'asc' })
-function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+const { getSortState, toggleSort, sortedData } = useTableSort(orderList)
 
 async function loadData() {
   try {

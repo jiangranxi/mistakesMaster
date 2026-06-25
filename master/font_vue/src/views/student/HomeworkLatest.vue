@@ -18,20 +18,20 @@
         <thead>
           <tr>
             <th style="width:80px">序号</th>
-            <th style="width:130px" class="sortable" @click="toggleSort('className')">班级<span class="sort-arrows" :data-sort="sortState['className']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:220px" class="sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:160px" class="sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortState['source']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:100px" class="sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:160px" class="sortable" @click="toggleSort('createTime')">布置作业时间<span class="sort-arrows" :data-sort="sortState['createTime']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-            <th style="width:160px" class="sortable" @click="toggleSort('deadline')">要求交作业时间<span class="sort-arrows" :data-sort="sortState['deadline']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:130px" class="sortable" @click="toggleSort('className')">班级<span class="sort-arrows" :data-sort="getSortState('className')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:220px" class="sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="getSortState('name')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="getSortState('source')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:100px" class="sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="getSortState('subject')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('createTime')">布置作业时间<span class="sort-arrows" :data-sort="getSortState('createTime')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+            <th style="width:160px" class="sortable" @click="toggleSort('deadline')">要求交作业时间<span class="sort-arrows" :data-sort="getSortState('deadline')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
             <th style="width:100px">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="!homeworkList.length" class="empty-row">
+          <tr v-if="!sortedData.length" class="empty-row">
             <td colspan="8">暂无数据</td>
           </tr>
-          <tr v-for="(item, idx) in homeworkList" :key="item.id">
+          <tr v-for="(item, idx) in sortedData" :key="item.id">
             <td>{{ idx + 1 }}</td>
             <td>{{ item.className }}</td>
             <td>{{ item.name }}</td>
@@ -59,10 +59,11 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { homeworkApi } from '@/api/homework'
 import { useToast } from '@/composables/useToast'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useTableSort } from '@/composables/useTableSort'
 
 const toast = useToast()
 
@@ -70,8 +71,7 @@ const homeworkList = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
-const sortState = reactive({ className: 'asc', name: 'asc', source: 'asc', subject: 'asc', createTime: 'asc', deadline: 'asc' })
-function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+const { getSortState, toggleSort, sortedData } = useTableSort(homeworkList)
 
 async function loadData() {
   try {

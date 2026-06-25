@@ -20,7 +20,7 @@
           <label>提交时间:</label>
           <DatePicker v-model="filters.time" placeholder="提交时间" style="width: 200px" />
         </div>
-        <span class="search-icon"><i class="ri-search-line"></i></span>
+        <span class="search-icon" @click="doSearch"><i class="ri-search-line"></i></span>
       </div>
       <div class="filter-row">
         <label class="filter-label">学 科:</label>
@@ -32,20 +32,20 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-time sortable" @click="toggleSort('submitTime')">提交时间<span class="sort-arrows" :data-sort="sortState['submitTime']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-name sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="sortState['name']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-source sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="sortState['source']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('totalScore')">试卷总分<span class="sort-arrows" :data-sort="sortState['totalScore']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('myScore')">我的得分<span class="sort-arrows" :data-sort="sortState['myScore']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('rank')">班级排名<span class="sort-arrows" :data-sort="sortState['rank']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-time sortable" @click="toggleSort('submitTime')">提交时间<span class="sort-arrows" :data-sort="getSortState('submitTime')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-name sortable" @click="toggleSort('name')">作业名称<span class="sort-arrows" :data-sort="getSortState('name')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-source sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="getSortState('source')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="getSortState('subject')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('totalScore')">试卷总分<span class="sort-arrows" :data-sort="getSortState('totalScore')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('myScore')">我的得分<span class="sort-arrows" :data-sort="getSortState('myScore')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('rank')">班级排名<span class="sort-arrows" :data-sort="getSortState('rank')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">批改详情</th>
               <th class="col-action">分析报告</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="!list.length" class="empty-row"><td colspan="10">暂无数据</td></tr>
-            <tr v-for="(item, idx) in list" :key="item.id">
+            <tr v-if="!sortedData.length" class="empty-row"><td colspan="10">暂无数据</td></tr>
+            <tr v-for="(item, idx) in sortedData" :key="item.id">
               <td>{{ idx + 1 }}</td>
               <td>{{ item.submitTime }}</td>
               <td>{{ item.name }}</td>
@@ -81,13 +81,13 @@ import { ref, reactive } from 'vue'
 import { homeworkApi } from '@/api/homework'
 import DatePicker from '@/components/DatePicker.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useTableSort } from '@/composables/useTableSort'
 
 const list = ref([])
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
-const sortState = reactive({ submitTime: 'asc', name: 'asc', source: 'asc', subject: 'asc', totalScore: 'asc', myScore: 'asc', rank: 'asc' })
-function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+const { getSortState, toggleSort, sortedData } = useTableSort(list)
 const filters = reactive({ book: '', name: '', time: '' })
 
 async function loadData() {
@@ -103,6 +103,7 @@ async function loadData() {
   } catch {}
 }
 
+function doSearch() { page.value = 1; loadData() }
 function changePage(p) {
   if (p >= 1 && p <= totalPages.value) { page.value = p; loadData() }
 }

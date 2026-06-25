@@ -6,10 +6,10 @@
       <thead>
         <tr>
           <th style="width:80px">序号</th>
-          <th style="width:120px" class="sortable" @click="toggleSort('from')">来自<span class="sort-arrows" :data-sort="sortState['from']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th style="width:120px" class="sortable" @click="toggleSort('role')">身份<span class="sort-arrows" :data-sort="sortState['role']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th class="sortable" @click="toggleSort('content')">消息内容<span class="sort-arrows" :data-sort="sortState['content']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-          <th style="width:160px" class="sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="sortState['time']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('from')">来自<span class="sort-arrows" :data-sort="getSortState('from')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:120px" class="sortable" @click="toggleSort('role')">身份<span class="sort-arrows" :data-sort="getSortState('role')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th class="sortable" @click="toggleSort('content')">消息内容<span class="sort-arrows" :data-sort="getSortState('content')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+          <th style="width:160px" class="sortable" @click="toggleSort('time')">时间<span class="sort-arrows" :data-sort="getSortState('time')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
           <th style="width:100px">状态</th>
           <th style="width:100px">操作</th>
         </tr>
@@ -33,10 +33,11 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref } from 'vue'
 import PaginationBar from '@/components/PaginationBar.vue'
-const sortState = reactive({ from: 'asc', role: 'asc', content: 'asc', time: 'asc' })
-function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
+import { useTableSort } from '@/composables/useTableSort'
+const list = ref([])
+const { getSortState, toggleSort, sortedData } = useTableSort(list)
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)

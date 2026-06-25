@@ -22,20 +22,20 @@
             <label>时间:</label>
             <DatePicker v-model="filters.startTime" placeholder="开始时间" style="width: 180px" />
             <DatePicker v-model="filters.endTime" placeholder="结束时间" style="width: 180px" />
-            <span class="search-btn"><i class="ri-search-line"></i></span>
+            <span class="search-btn" @click="doSearch"><i class="ri-search-line"></i></span>
           </div>
         </div>
         <div class="filter-row">
           <label class="filter-label">学 科:</label>
           <div class="tag-group">
-            <span class="subject-tag" v-for="s in subjects" :key="s" :class="{ active: filters.subject === s }" @click="filters.subject = filters.subject === s ? '' : s">{{ s }}</span>
+            <span class="subject-tag" v-for="s in subjects" :key="s" :class="{ active: filters.subject === s }" @click="selectSubject(s)">{{ s }}</span>
           </div>
         </div>
         <div class="filter-row">
           <label class="filter-label">班 级:</label>
           <div class="tag-group">
-            <span class="subject-tag" :class="{ active: filters.class === '' }" @click="filters.class = ''">全部</span>
-            <span class="subject-tag" v-for="c in classes" :key="c" :class="{ active: filters.class === c }" @click="filters.class = filters.class === c ? '' : c">{{ c }}</span>
+            <span class="subject-tag" :class="{ active: filters.class === '' }" @click="selectClass('')">全部</span>
+            <span class="subject-tag" v-for="c in classes" :key="c" :class="{ active: filters.class === c }" @click="selectClass(c)">{{ c }}</span>
           </div>
         </div>
       </div>
@@ -46,21 +46,38 @@
           <thead>
             <tr>
               <th class="col-index">序号</th>
-              <th class="col-date sortable" @click="toggleSort('date')">日期<span class="sort-arrows" :data-sort="sortState['date']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-report sortable" @click="toggleSort('report')">讲评报告<span class="sort-arrows" :data-sort="sortState['report']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-book sortable" @click="toggleSort('book')">书目名称<span class="sort-arrows" :data-sort="sortState['book']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="sortState['subject']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-class sortable" @click="toggleSort('class')">班级<span class="sort-arrows" :data-sort="sortState['class']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('max')">最高分<span class="sort-arrows" :data-sort="sortState['max']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('min')">最低分<span class="sort-arrows" :data-sort="sortState['min']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('avg')">平均数<span class="sort-arrows" :data-sort="sortState['avg']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-score sortable" @click="toggleSort('median')">中位数<span class="sort-arrows" :data-sort="sortState['median']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-mode sortable" @click="toggleSort('mode')">众数<span class="sort-arrows" :data-sort="sortState['mode']"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-date sortable" @click="toggleSort('date')">日期<span class="sort-arrows" :data-sort="getSortState('date')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-report sortable" @click="toggleSort('report')">讲评报告<span class="sort-arrows" :data-sort="getSortState('report')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-book sortable" @click="toggleSort('book')">书目名称<span class="sort-arrows" :data-sort="getSortState('book')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="getSortState('subject')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-class sortable" @click="toggleSort('class')">班级<span class="sort-arrows" :data-sort="getSortState('class')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('max')">最高分<span class="sort-arrows" :data-sort="getSortState('max')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('min')">最低分<span class="sort-arrows" :data-sort="getSortState('min')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('avg')">平均数<span class="sort-arrows" :data-sort="getSortState('avg')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-score sortable" @click="toggleSort('median')">中位数<span class="sort-arrows" :data-sort="getSortState('median')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-mode sortable" @click="toggleSort('mode')">众数<span class="sort-arrows" :data-sort="getSortState('mode')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="!tableData.length" class="empty-row">
+            <tr v-for="(row, i) in sortedData" :key="i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ row.date }}</td>
+              <td>{{ row.report }}</td>
+              <td>{{ row.book }}</td>
+              <td>{{ row.subject }}</td>
+              <td>{{ row.class }}</td>
+              <td>{{ row.max }}</td>
+              <td>{{ row.min }}</td>
+              <td>{{ row.avg }}</td>
+              <td>{{ row.median }}</td>
+              <td>{{ row.mode }}</td>
+              <td class="action-cell">
+                <a href="javascript:void(0)">讲评报告</a>
+                <a href="javascript:void(0)">讲评概述</a>
+              </td>
+            </tr>
+            <tr v-if="!sortedData.length" class="empty-row">
               <td colspan="12">暂无数据</td>
             </tr>
           </tbody>
@@ -76,7 +93,7 @@
         :pageSize="pageSize"
         :totalPages="totalPages"
         @page-change="changePage"
-        @page-size-change="val => { pageSize = val }"
+        @page-size-change="val => { pageSize = val; loadData() }"
       />
     </div>
   </div>
@@ -84,8 +101,10 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { reviewApi } from '@/api/review'
 import DatePicker from '@/components/DatePicker.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useTableSort } from '@/composables/useTableSort'
 
 const filters = reactive({
   report: '',
@@ -101,12 +120,45 @@ const classes = ref([])
 const tableData = ref([])
 const page = ref(1)
 const pageSize = ref(15)
-const totalPages = computed(() => Math.ceil(tableData.value.length / pageSize.value) || 0)
-const sortState = reactive({ date: 'asc', report: 'asc', book: 'asc', subject: 'asc', class: 'asc', max: 'asc', min: 'asc', avg: 'asc', median: 'asc', mode: 'asc' })
-function toggleSort(key) { sortState[key] = sortState[key] === 'asc' ? 'desc' : 'asc' }
-function changePage(p) {
-  if (p >= 1 && p <= totalPages.value) { page.value = p }
+const total = ref(0)
+const totalPages = computed(() => Math.ceil(total.value / pageSize.value) || 0)
+const { getSortState, toggleSort, sortedData } = useTableSort(tableData)
+
+async function loadData() {
+  try {
+    const res = await reviewApi.getHomeworkReports({
+      page: page.value, pageSize: pageSize.value,
+      report: filters.report || undefined,
+      book: filters.book || undefined,
+      startTime: filters.startTime || undefined,
+      endTime: filters.endTime || undefined,
+      subject: filters.subject || undefined,
+      class: filters.class || undefined
+    })
+    if (res) {
+      tableData.value = res.list || []
+      total.value = res.total || 0
+    }
+  } catch {}
 }
+
+function doSearch() { page.value = 1; loadData() }
+
+function selectSubject(s) {
+  filters.subject = filters.subject === s ? '' : s
+  doSearch()
+}
+
+function selectClass(c) {
+  filters.class = filters.class === c ? '' : c
+  doSearch()
+}
+
+function changePage(p) {
+  if (p >= 1 && p <= totalPages.value) { page.value = p; loadData() }
+}
+
+loadData()
 </script>
 
 <style scoped>
