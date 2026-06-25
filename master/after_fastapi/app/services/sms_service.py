@@ -25,7 +25,8 @@ class SmsService:
         if device_id:
             count = await self.sms_repo.count_device_today(device_id)
             if count >= 20:
-                raise TooManyRequests("该设备今日发送验证码已达上限")
+                # raise TooManyRequests("该设备今日发送验证码已达上限")
+                raise TooManyRequests("发送验证码频繁，联系客服后重试！")
 
         code = str(random.randint(100000, 999999))
         await self.sms_repo.create_code(phone, code, code_type, device_id=device_id)

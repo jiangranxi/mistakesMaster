@@ -108,8 +108,8 @@ async function sendCode() {
         codeSending.value = false
       }
     }, 1000)
-  } catch {
-    toast.error('发送失败，请稍后重试')
+  } catch (e) {
+    toast.error(e?.response?.data?.message || '发送失败，请稍后重试')
     codeText.value = '获取验证码'
     codeSending.value = false
   }
