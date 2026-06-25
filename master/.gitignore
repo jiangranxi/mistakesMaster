@@ -1,5 +1,6 @@
 # 忽略 node_modules 文件夹
 node_modules/
+dist/
 
 # 忽略 .env 环境变量文件
 .env
@@ -13,9 +14,13 @@ node_modules/
 # claude相关文件
 api.md
 CLAUDE.md
+deploy.md
+recommend.md
+sql.md
 .claudeignore
 
 # 后端文件
 .idea
 .venv
 .env.example
+.env.production

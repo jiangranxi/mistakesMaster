@@ -25,7 +25,7 @@ uvicorn app.main:app --reload --port 8000
 |------|------|
 | Web 框架 | FastAPI 0.115 |
 | ORM | SQLAlchemy 2.0 (async) |
-| 数据库 | SQLite (开发) / PostgreSQL (生产) |
+| 数据库 | SQLite (开发) / MySQL (生产) |
 | 认证 | JWT (python-jose) + bcrypt |
 | 配置 | pydantic-settings |
 

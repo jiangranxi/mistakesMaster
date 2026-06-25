@@ -1,1 +1,0 @@
-import{z as t}from"./index-DqGBQzeJ.js";const p={getBookList:o=>t.get("/books",{params:o}),getBookDetail:o=>t.get(`/books/${o}`),uploadCover:o=>{const e=new FormData;return e.append("file",o),t.post("/upload/image",e,{headers:{"Content-Type":"multipart/form-data"}})},updateBook:(o,e)=>t.put(`/books/${o}`,e)};export{p as e};

@@ -21,11 +21,11 @@ async def lifespan(app: FastAPI):
     # 开发阶段自动建表，生产环境应使用 Alembic 迁移
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    # 确保上传目录存在
-    Path(settings.UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
+
     yield
 
-
+# 确保上传目录存在
+Path(settings.UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
 app = FastAPI(
     title=settings.APP_NAME,
     version="1.0.0",
