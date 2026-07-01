@@ -35,14 +35,23 @@
                 <th class="col-size sortable" @click="toggleSort('size')">
                   文件大小<span class="sort-arrows" :data-sort="getSortState('size')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
-                <th class="col-time sortable" @click="toggleSort('time')">
-                  创建时间<span class="sort-arrows" :data-sort="getSortState('time')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
+                <th class="col-time sortable" @click="toggleSort('createTime')">
+                  创建时间<span class="sort-arrows" :data-sort="getSortState('createTime')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span>
                 </th>
                 <th class="col-action">操作</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="empty-row">
+              <tr v-for="(row, i) in sortedData" :key="row.id || i">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.size }}</td>
+                <td>{{ row.createTime }}</td>
+                <td class="action-cell">
+                  <a href="javascript:void(0)">下载</a>
+                </td>
+              </tr>
+              <tr v-if="!sortedData.length" class="empty-row">
                 <td colspan="5">没有教案</td>
               </tr>
             </tbody>
@@ -232,4 +241,6 @@ onMounted(() => fetchData())
   height: 53px;
 }
 .spacer-16 { height: 16px; }
+.action-cell { display: flex; gap: 8px; }
+.action-cell a { color: #2B7CD3; text-decoration: none; font-size: 14px; }
 </style>

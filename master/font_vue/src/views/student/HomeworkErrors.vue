@@ -37,7 +37,7 @@
               <th class="col-source sortable" @click="toggleSort('source')">作业来源<span class="sort-arrows" :data-sort="getSortState('source')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-subject sortable" @click="toggleSort('subject')">学科<span class="sort-arrows" :data-sort="getSortState('subject')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-time sortable" @click="toggleSort('submitTime')">提交时间<span class="sort-arrows" :data-sort="getSortState('submitTime')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
-              <th class="col-error sortable" @click="toggleSort('errorNo')">错题序号<span class="sort-arrows" :data-sort="getSortState('errorNo')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
+              <th class="col-error sortable" @click="toggleSort('errorSeq')">错题序号<span class="sort-arrows" :data-sort="getSortState('errorSeq')"><span class="sort-arrow up"></span><span class="sort-arrow down"></span></span></th>
               <th class="col-action">操作</th>
             </tr>
           </thead>

@@ -14,7 +14,6 @@ from app.routers import auth, books, member, messages, upload
 from app.routers.teacher import classes, homework as t_homework, lesson_plans, review
 from app.routers.student import classes as s_classes, homework as s_homework
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用生命周期 - 启动时自动建表"""

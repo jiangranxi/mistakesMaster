@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 
 from sqlalchemy import select, func, desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.models.class_ import Class
 from app.models.homework import Homework, StudentHomework, ErrorItem
 from app.repositories.base import BaseRepository
 
@@ -75,8 +75,9 @@ class StudentHomeworkRepository(BaseRepository[StudentHomework]):
                              is_history: bool = True) -> tuple[list[dict], int]:
         offset = (page - 1) * page_size
         stmt = (
-            select(StudentHomework, Homework.name, Homework.source, Homework.subject)
+            select(StudentHomework, Homework.name, Homework.source, Homework.subject, Class.name, Homework.deadline, Homework.created_at)
             .join(Homework, StudentHomework.homework_id == Homework.id)
+            .join(Class, Homework.class_id == Class.id)
             .where(StudentHomework.student_id == student_id)
         )
 
@@ -118,13 +119,18 @@ class StudentHomeworkRepository(BaseRepository[StudentHomework]):
         result = await self.db.execute(stmt)
         rows = result.all()
         count_result = await self.db.execute(count_stmt)
-
+        for row in rows:
+            print("++++++++++++++++++++++++")
+            print(row)
         items = [
             {
                 "id": str(row[0].id),
                 "name": row[1],
                 "source": row[2],
                 "subject": row[3],
+                "className": row[4],
+                "deadline": row[5],
+                "createTime": row[6],
                 "submitTime": row[0].submit_time.strftime("%Y-%m-%d %H:%M:%S") if row[0].submit_time else None,
                 "totalScore": row[0].total_score,
                 "myScore": row[0].my_score,

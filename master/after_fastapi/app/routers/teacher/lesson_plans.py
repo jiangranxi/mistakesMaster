@@ -19,7 +19,9 @@ async def get_own_plans(
 ):
     """我的教案"""
     service = LessonPlanService(db)
-    return await service.get_own_plans(current_user.id, page, pageSize, sortField, sortOrder)
+    result = await service.get_own_plans(current_user.id, page, pageSize, sortField, sortOrder)
+
+    return result
 
 
 @router.get("/cloud")
@@ -33,4 +35,6 @@ async def get_cloud_plans(
 ):
     """云端教案"""
     service = LessonPlanService(db)
-    return await service.get_cloud_plans(page, pageSize, sortField, sortOrder)
+    result = await service.get_cloud_plans(page, pageSize, sortField, sortOrder)
+    return result
+    # return await service.get_cloud_plans(page, pageSize, sortField, sortOrder)

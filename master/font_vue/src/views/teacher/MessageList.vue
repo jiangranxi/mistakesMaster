@@ -15,7 +15,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="empty-row"><td :colspan="7">暂无数据</td></tr>
+        <tr v-if="!sortedData.length" class="empty-row"><td colspan="7">暂无数据</td></tr>
+        <tr v-for="(item, idx) in sortedData" :key="item.id">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ item.from }}</td>
+          <td>{{ item.role }}</td>
+          <td>{{ item.content }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.read ? '已读' : '未读' }}</td>
+          <td><a href="#" @click.prevent="markRead(item)">标记已读</a></td>
+        </tr>
       </tbody>
     </table>
 
@@ -28,22 +37,41 @@
       :pageSize="pageSize"
       :totalPages="totalPages"
       @page-change="changePage"
-      @page-size-change="val => { pageSize = val }"
+      @page-size-change="val => { pageSize = val; loadData() }"
     />
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
+import { messageApi } from '@/api/message'
 import PaginationBar from '@/components/PaginationBar.vue'
 import { useTableSort } from '@/composables/useTableSort'
+
 const list = ref([])
-const { getSortState, toggleSort, sortedData } = useTableSort(list)
 const page = ref(1)
 const pageSize = ref(15)
 const totalPages = ref(0)
+const { getSortState, toggleSort, sortedData } = useTableSort(list)
+
 function changePage(p) {
-  if (p >= 1 && p <= totalPages.value) { page.value = p }
+  if (p >= 1 && p <= totalPages.value) { page.value = p; loadData() }
 }
+
+async function loadData() {
+  try {
+    const res = await messageApi.getMessages({ page: page.value, pageSize: pageSize.value })
+    if (res) {
+      list.value = res.list || []
+      totalPages.value = Math.ceil((res.total || 0) / pageSize.value) || 0
+    }
+  } catch {}
+}
+
+async function markRead(item) {
+  try { await messageApi.markRead(item.id); item.read = true } catch {}
+}
+
+loadData()
 </script>
 
 <style scoped>

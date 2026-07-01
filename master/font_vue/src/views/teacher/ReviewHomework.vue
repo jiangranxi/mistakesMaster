@@ -66,7 +66,7 @@
               <td>{{ row.report }}</td>
               <td>{{ row.book }}</td>
               <td>{{ row.subject }}</td>
-              <td>{{ row.class }}</td>
+              <td>{{ row.className }}</td>
               <td>{{ row.max }}</td>
               <td>{{ row.min }}</td>
               <td>{{ row.avg }}</td>

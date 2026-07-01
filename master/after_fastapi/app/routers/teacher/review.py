@@ -51,10 +51,12 @@ async def get_homework_reports(
 ):
     """作业讲评"""
     service = ReviewService(db)
-    return await service.get_homework_reports(
+    result = await service.get_homework_reports(
         current_user.id, page, pageSize,
         report=report, book=book,
         start_time=startTime, end_time=endTime,
         subject=subject, class_name=class_,
         sort_field=sortField, sort_order=sortOrder,
     )
+    print(result)
+    return result
