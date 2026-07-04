@@ -1,9 +1,12 @@
+import logging
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.exceptions import BadRequest, NotFound
 from app.repositories.class_repo import ClassRepository
+
+logger = logging.getLogger(__name__)
 
 
 class ClassService:
@@ -43,18 +46,22 @@ class ClassService:
 
     async def create_class(self, teacher_id: uuid.UUID, name: str, description: str | None) -> dict:
         cls = await self.class_repo.create_class(teacher_id, name, description)
+        logger.info("班级创建成功: class_id=%s, teacher_id=%s, name=%s", cls.id, teacher_id, name)
         return {"id": str(cls.id), "code": cls.code}
 
     async def join_class(self, user_id: uuid.UUID, code: str, message: str | None) -> dict:
         cls = await self.class_repo.get_by_code(code)
         if not cls:
+            logger.warning("加入班级失败: user_id=%s, reason=invalid_code", user_id)
             raise NotFound("班级不存在或班级码错误")
 
         already = await self.class_repo.is_student_in_class(cls.id, user_id)
         if already:
+            logger.info("重复加入班级: user_id=%s, class_id=%s", user_id, cls.id)
             raise BadRequest("你已加入该班级")
 
         await self.class_repo.add_student(cls.id, user_id)
+        logger.info("加入班级成功: user_id=%s, class_id=%s", user_id, cls.id)
         return {"message": "加入成功"}
 
     async def get_class_detail(self, class_id: uuid.UUID) -> dict:

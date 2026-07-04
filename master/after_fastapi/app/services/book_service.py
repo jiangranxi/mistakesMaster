@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -5,6 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.exceptions import NotFound
 from app.repositories.book_repo import BookRepository
 from app.utils.tree import build_chapter_tree
+
+logger = logging.getLogger(__name__)
 
 
 class BookService:
@@ -50,7 +53,9 @@ class BookService:
         book = await self.book_repo.get_by_id(book_id)
         if not book:
             raise NotFound("习题集不存在")
+        changed_fields = [k for k in data if k in ("name", "cover", "subject", "publisher", "version", "gradeTerm", "description")]
         await self.book_repo.update(book, **data)
+        logger.info("习题集更新成功: book_id=%s, fields=%s", book_id, changed_fields)
         return {"id": str(book.id), "cover": book.cover, "message": "更新成功"}
 
     async def get_detail(self, book_id: uuid.UUID) -> dict:

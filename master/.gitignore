@@ -17,6 +17,8 @@ CLAUDE.md
 deploy.md
 recommend.md
 sql.md
+log.md
+question.md
 .claudeignore
 
 # 后端文件
@@ -24,3 +26,6 @@ sql.md
 .venv
 .env.example
 .env.production
+
+# 日志
+logs/

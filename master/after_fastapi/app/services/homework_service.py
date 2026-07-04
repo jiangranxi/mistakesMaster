@@ -1,9 +1,12 @@
+import logging
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.exceptions import BadRequest, NotFound
 from app.repositories.homework_repo import HomeworkRepository, StudentHomeworkRepository, ErrorItemRepository
+
+logger = logging.getLogger(__name__)
 
 
 class HomeworkService:
@@ -86,6 +89,8 @@ class HomeworkService:
             deadline_str=data.deadline,
             total_score=data.totalScore,
         )
+        logger.info("作业布置成功: homework_id=%s, teacher_id=%s, class_id=%s, name=%s",
+                    hw.id, teacher_id, class_id, data.name)
         return {"id": str(hw.id), "message": "布置成功"}
 
 
@@ -142,6 +147,7 @@ class StudentHomeworkService:
 
     async def submit(self, student_id: uuid.UUID, homework_id: uuid.UUID, content: dict | None) -> dict:
         await self.student_hw_repo.submit(homework_id, student_id, content or {})
+        logger.info("作业提交成功: student_id=%s, homework_id=%s", student_id, homework_id)
         return {"message": "提交成功"}
 
     async def get_correction(self, student_id: uuid.UUID, homework_id: uuid.UUID) -> dict:

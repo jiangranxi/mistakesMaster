@@ -1,3 +1,4 @@
+import logging
 import uuid
 from datetime import datetime, timezone, timedelta
 
@@ -7,6 +8,7 @@ from app.models.class_ import Class
 from app.models.homework import Homework, StudentHomework, ErrorItem
 from app.repositories.base import BaseRepository
 
+logger = logging.getLogger(__name__)
 TZ = timezone(timedelta(hours=8))
 
 
@@ -38,7 +40,7 @@ class HomeworkRepository(BaseRepository[Homework]):
             try:
                 deadline = datetime.fromisoformat(deadline_str)
             except (ValueError, TypeError):
-                pass
+                logger.warning("无效截止日期格式: deadline_str=%s, homework_name=%s", deadline_str, name)
 
         hw = Homework(
             id=uuid.uuid4(),
@@ -119,9 +121,6 @@ class StudentHomeworkRepository(BaseRepository[StudentHomework]):
         result = await self.db.execute(stmt)
         rows = result.all()
         count_result = await self.db.execute(count_stmt)
-        for row in rows:
-            print("++++++++++++++++++++++++")
-            print(row)
         items = [
             {
                 "id": str(row[0].id),

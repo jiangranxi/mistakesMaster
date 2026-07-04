@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -6,6 +8,7 @@ from app.models.user import User
 from app.schemas.member import UpdateProfileRequest, ChangePasswordRequest
 from app.services.member_service import MemberService
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/member", tags=["会员中心"])
 
 
@@ -26,10 +29,7 @@ async def update_profile(
     db: AsyncSession = Depends(get_db),
 ):
     """修改个人资料"""
-    print("-----------------------")
-    print(req)
-    print(current_user)
-    print("-----------------------")
+    logger.debug("更新用户资料: user_id=%s", current_user.id)
     service = MemberService(db)
     return await service.update_profile(current_user, req.model_dump(exclude_none=True))
 

@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +10,9 @@ from app.models.user import User
 from app.models.profile import Profile
 from app.repositories.order_repo import OrderRepository
 from datetime import date, datetime
+
+logger = logging.getLogger(__name__)
+
 
 class MemberService:
     """会员中心服务"""
@@ -83,9 +87,11 @@ class MemberService:
 
     async def change_password(self, user: User, old_password: str, new_password: str) -> None:
         if not verify_password(old_password, user.password_hash):
+            logger.warning("密码修改失败: user_id=%s, reason=old_password_mismatch", user.id)
             raise BadRequest("原密码错误")
         user.password_hash = hash_password(new_password)
         await self.db.flush()
+        logger.info("密码修改成功: user_id=%s", user.id)
 
     async def get_orders(self, user_id: uuid.UUID, page: int, page_size: int,
                           status: str, sort_field: str | None = None,

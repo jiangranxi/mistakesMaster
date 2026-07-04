@@ -15,6 +15,12 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 小时
 
+    # 日志
+    LOG_LEVEL: str = "INFO"
+    LOG_DIR: str = "logs"
+    LOG_BACKUP_COUNT: int = 30
+    LOG_ERROR_BACKUP_COUNT: int = 90
+
     # Redis（可选）
     REDIS_URL: str = ""
 

@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -8,28 +9,43 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.core.exceptions import AppException
+from app.core.logging_config import setup_logging
 from app.database import engine
+from app.middleware.request_logging import RequestLoggingMiddleware
 from app.models import Base
 from app.routers import auth, books, member, messages, upload
 from app.routers.teacher import classes, homework as t_homework, lesson_plans, review
 from app.routers.student import classes as s_classes, homework as s_homework
 
+logger = logging.getLogger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用生命周期 - 启动时自动建表"""
-    # 开发阶段自动建表，生产环境应使用 Alembic 迁移
+    logger.info("应用启动中...")
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    logger.info("数据库表初始化完成")
 
     yield
 
+    logger.info("应用关闭")
+
 # 确保上传目录存在
 Path(settings.UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
+
+# 初始化日志（必须在 FastAPI 实例化之前）
+setup_logging()
+
 app = FastAPI(
     title=settings.APP_NAME,
     version="1.0.0",
     lifespan=lifespan,
 )
+
+# 请求日志中间件（最外层，最先执行）
+app.add_middleware(RequestLoggingMiddleware)
+
 
 # CORS 中间件
 app.add_middleware(
@@ -73,8 +89,7 @@ async def app_exception_handler(request: Request, exc: AppException):
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    import traceback
-    traceback.print_exc()
+    logger.exception("未捕获异常: %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=500,
         content={"message": "服务器内部错误"},

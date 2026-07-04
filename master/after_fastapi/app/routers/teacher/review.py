@@ -58,5 +58,4 @@ async def get_homework_reports(
         subject=subject, class_name=class_,
         sort_field=sortField, sort_order=sortOrder,
     )
-    print(result)
     return result

@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,6 +16,7 @@ from app.schemas.auth import (
 )
 from app.services.auth_service import AuthService
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["认证"])
 
 
@@ -29,7 +32,7 @@ async def send_code(req: SendCodeRequest, db: AsyncSession = Depends(get_db)):
     """发送短信验证码（注册/忘记密码）"""
     service = AuthService(db)
     code = await service.send_sms_code(req.phone, req.type, req.deviceId)
-    print(code)
+    logger.debug("SMS 验证码: phone=%s, code=%s, type=%s", req.phone, code, req.type)
     return {"message": f"验证码已发送: {code}"}
 
 
